@@ -1,0 +1,233 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    var Cover = (PROFILE_COVER)ViewBag.Cover;
+}
+<style>
+    #hero {
+        border-radius: 25px;
+        border: inset;
+        border-color: aliceblue;
+        background-repeat: repeat;
+        padding: 5px;
+        width: 100%;
+        height: 100vh;
+        background-color: #E9E8E6;
+        background-size: cover;
+    }
+</style>
+
+<style>
+    /*Back ground animation for mobile*/
+    @@keyframes color {
+        0% {
+            background: white
+        }
+
+        20% {
+            background: grey;
+        }
+
+        40% {
+            background: white;
+        }
+
+        60% {
+            background: grey;
+        }
+
+        80% {
+            background: white
+        }
+
+        100% {
+            background: grey;
+        }
+    }
+
+    .width-complete {
+        width: 100%
+    }
+
+    #mobIMG {
+        border-radius: 25px;
+        border: inset;
+        border-color: aliceblue;
+        animation: color 5s infinite linear;
+        __text-align: center;
+        padding: 2em;
+        __font-family: 'Kavoon', sans-serif;
+        __font-size: 2.5em;
+    }
+
+    @@keyframes color-change {
+        /*For color change*/
+        /*0% {color: black;}
+            20% {color: darkcyan;}
+            40% {color: red;}
+            60% {color: blue;}
+            80% {color: green;}
+            100% { color: yellow;}*/
+        /*For shake*/
+        0% {
+            transform: translate(1px, 1px) rotate(0deg);
+            color: black;
+        }
+
+        10% {
+            transform: translate(-1px, -2px) rotate(-1deg);
+            color: darkcyan;
+        }
+
+        20% {
+            transform: translate(-3px, 0px) rotate(1deg);
+            color: black;
+        }
+
+        30% {
+            transform: translate(3px, 2px) rotate(0deg);
+            color: darkcyan;
+        }
+
+        40% {
+            transform: translate(1px, -1px) rotate(1deg);
+            color: black;
+        }
+
+        50% {
+            transform: translate(-1px, 2px) rotate(-1deg);
+            color: darkcyan;
+        }
+
+        60% {
+            transform: translate(-3px, 1px) rotate(0deg);
+            color: black;
+        }
+
+        70% {
+            transform: translate(3px, 1px) rotate(-1deg);
+            color: darkcyan;
+        }
+
+        80% {
+            transform: translate(-1px, -1px) rotate(1deg);
+            color: black;
+        }
+
+        90% {
+            transform: translate(1px, 2px) rotate(0deg);
+            color: darkcyan;
+        }
+
+        100% {
+            transform: translate(1px, -2px) rotate(-1deg);
+            color: black;
+        }
+    }
+
+    #mobText {
+        animation: color-change 2s infinite;
+    }
+
+        #mobText:hover {
+            animation-play-state: paused;
+        }
+</style>
+
+<link href="~/assets/scss/mousemove.css" rel="stylesheet" />
+
+<!-- ======= Hero Section for Desktop View ======= -->
+<section id="hero" class="d-none d-sm-block align-items-center" style="overflow:hidden;">
+    <div id="parallax" class="container d-flex flex-column align-items-center" data-aos="zoom-in" data-aos-delay="100">
+
+        @*<div class="pointer pointer1">☺</div>
+        <div class="pointer pointer2">☻</div>
+        <div class="pointer pointer3">♥</div>
+        <div class="pointer pointer4">♦</div>
+        <div class="pointer pointer5">♣</div>*@
+
+        <div class="container-fluid p-5">
+            <div class="row align-items-center">
+                @if (Cover != null)
+                {
+                    <div class="col-md-4">
+                        <div class="container-fluid" style="height:fit-content; width:fit-content; margin:auto">
+                            @if (Cover.COVER_IMAGE != null)
+                            {
+                                <img class="width-complete rounded-circle img-fluid" src="data:ImageData;base64,@System.Convert.ToBase64String(Cover.COVER_IMAGE)" alt="" />
+                                @*<img style="margin-left:90px;" class="rounded-circle img-fluid" src="~/assets/img/about.jpg" alt="">*@
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-2"></div>
+
+                    <div class="col-md-6" style="margin:auto">
+                        <h1>@Cover.COVER_NAME</h1>
+                        <h2>@Cover.COVER_DESC</h2>
+                        <a href="@Url.Action("About","MY_PROFILE")" class="btn-about">About Me</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-6">
+                        <div class="container-fluid" style="height:fit-content; width:fit-content; margin:auto">
+                            @*<img style="margin-left:90px;" class="rounded-circle img-fluid" src="~/assets/img/about.jpg" alt="">*@
+                            <img class="width-complete rounded-circle img-fluid" src="~/assets/img/about.jpg" alt="" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6" style="margin:auto">
+                        <h1>@ViewBag.Name</h1>
+                        <h2>@ViewBag.Bio</h2>
+                        <a href="@Url.Action("About","MY_PROFILE")" class="btn-about">About Me</a>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</section><!-- End Hero -->
+<!-- ======= Hero Section for Mobile View ======= -->
+<section id="mobIMG" class="d-block d-sm-none" style="overflow:hidden;">
+    <br />
+    <br />
+    @if (Cover != null)
+    {
+        <div class="container p-5" data-aos="zoom-in" data-aos-delay="100">
+            <div class="row align-items-center" style="height:fit-content; width:fit-content;">
+                @if (Cover.COVER_IMAGE != null)
+                {
+                    <img class="width-complete rounded-circle img-fluid" src="data:ImageData;base64,@System.Convert.ToBase64String(Cover.COVER_IMAGE)" alt="" />
+                    @*<img style="margin-left:40px;" class="rounded-circle img-fluid" src="~/assets/img/about_mobile.jpg" alt="">*@
+                }
+            </div>
+        </div>
+        <div class="container-fluid p-3">
+            <div class="row align-items-sm-center">
+                <h1 id="mobText">@Cover.COVER_NAME</h1>
+                <h6>@Cover.COVER_DESC</h6>
+                <br /> <br />
+                <a href="@Url.Action("About","MY_PROFILE")" style="width:50%; margin-left:10px;" class="btn btn-info">About Me</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container p-5" data-aos="zoom-in" data-aos-delay="100">
+            <div class="row align-items-center" style="height:fit-content; width:fit-content;">
+                <img class="width-complete rounded-circle img-fluid" src="~/assets/img/about_mobile.jpg" alt="">
+            </div>
+        </div>
+        <div class="container-fluid p-3">
+            <div class="row align-items-sm-center">
+                <h1 id="mobText">@ViewBag.Name</h1>
+                <h6>@ViewBag.Bio</h6>
+                <br /> <br />
+                <a href="@Url.Action("About","MY_PROFILE")" style="width:50%; margin-left:10px;" class="btn btn-info">About Me</a>
+            </div>
+        </div>
+    }
+
+</section><!-- End Hero -->
+@section Scripts{
+    <script src="~/assets/js/mousemove.js"></script>
+}

@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Sakib's Portfolio</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+
+    <link href="~/assets/img/favicon.png" rel="icon">
+    <link href="~/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="~/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="~/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="~/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/assets/vendor/boxicons/css/boxicons.css" rel="stylesheet" />
+    <!-- Template Main CSS File   -->
+    <link href="~/assets/css/style.css" rel="stylesheet" />
+
+    <!-- =======================================================
+    * Template Name: Kelly - v4.9.1
+    * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</head>
+<style>
+    div.myContainer {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+    }
+</style>
+<style>
+    .navbar li:hover > a {
+        color: darkcyan;
+    }
+
+    .navbar li > a {
+        color: black;
+    }
+
+    #myH{
+        font-family: "Brush Script MT";
+        color:black;
+    }
+
+    .circle {
+        border-radius: 50%;
+        padding: 10px;
+        border: 1px solid;
+        color: #000;
+        border-color: black;
+        background-position: left top;
+        background-repeat: repeat;
+        padding: 5px;
+    }
+</style>
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+
+            <h1 class="circle"><a id="myH" href="@Url.Action("Index","Home")">Sakib</a></h1>
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+            <nav id="navbar" class="navbar order-last order-lg-0">
+                <ul>
+                    <li class="nav-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    @*<li class="nav-item"><a href="@Url.Action("Test","MY_PROFILE")">Test</a></li>*@
+                    <li class="nav-item"><a href="@Url.Action("About","MY_PROFILE")">About</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Resume","MY_PROFILE")">Resume</a></li>
+                    <li class="nav-item"><a href="@Url.Action("Projects","MY_PROFILE")">My Works</a></li>    
+                    <li><a href="@Url.Action("Contact","MY_PROFILE")">Contact</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#">Admin</a>
+                            <ul>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" href="#">Edit About</a>
+                                    <ul>
+                                        <li class="nav-item"><a href="@Url.Action("Index","PROFILE_COVER")">Edit Cover</a></li>
+                                        <li class="nav-item"><a href="@Url.Action("Index","MY_PROFILE")">Edit Profile</a></li>
+                                        <li class="nav-item"><a href="@Url.Action("Index","MY_SKILL")">Edit Skills</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" href="#">Resume</a>
+                                    <ul>
+                                        <li class="nav-item"><a href="@Url.Action("Index","EDUCATION")">Edit Education</a></li>
+                                        <li class="nav-item"><a href="@Url.Action("Index","EXPERIENCE")">Edit Experience</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index","PROJECTS")">Edit Projects</a>
+                                </li>
+                                <li class="nav-item">
+                                    @if (@ViewBag.Message != null)
+                                    {
+                                        @if (@ViewBag.Message != "0")
+                                        {
+                                            <a style="color:red;" href="@Url.Action("PendingIndex","CONTACTS")">Messages <span>@ViewBag.Message</span></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("PendingIndex","CONTACTS")">Messages</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("PendingIndex","CONTACTS")">Messages</a>
+                                    }
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+
+            <div class="header-social-links">
+                <a href="https://twitter.com/Sakibur78738178" class="twitter"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.facebook.com/sakibur.rahman.rocky" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/sakibur_rocky/" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/md-sakibur-rahman-070853196/" class="linkedin"><i class="bi bi-linkedin"></i></i></a>
+            </div>
+
+        </div>
+
+    </header><!-- End Header -->
+
+    <div>
+        <div class="myContainer">
+            @RenderBody()
+        </div>
+    </div>
+
+    <footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                &copy; Copyright <strong><span>Sakib</span></strong>
+            </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/ -->
+                Technologies by Microsoft
+            </div>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-area="Identity" asp-page="/Account/Logout">Logout</a>
+            }
+            else
+            {
+                <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+            }
+            
+            
+        </div>
+    </footer><!-- End  Footer -->
+
+    <div id="preloader"></div>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="~/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="~/assets/vendor/aos/aos.js"></script>
+    <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="~/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="~/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="~/assets/vendor/waypoints/noframework.waypoints.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="~/assets/js/main.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+﻿@model SAKIB_PORTFOLIO.Models.PROJECTS
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section>
+    <div class="container-fluid p-5">
+        <h1>Create</h1>
+
+<h4>PROJECTS</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PROJECT_NAME" class="control-label"></label>
+                <input asp-for="PROJECT_NAME" class="form-control" />
+                <span asp-validation-for="PROJECT_NAME" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DESCRIPTION_1" class="control-label"></label>
+                <textarea asp-for="DESCRIPTION_1" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="DESCRIPTION_1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DESCRIPTION_2" class="control-label"></label>
+                <input asp-for="DESCRIPTION_2" class="form-control" />
+                <span asp-validation-for="DESCRIPTION_2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DESCRIPTION_3" class="control-label"></label>
+                <input asp-for="DESCRIPTION_3" class="form-control" />
+                <span asp-validation-for="DESCRIPTION_3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DESCRIPTION_4" class="control-label"></label>
+                <input asp-for="DESCRIPTION_4" class="form-control" />
+                <span asp-validation-for="DESCRIPTION_4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DESCRIPTION_5" class="control-label"></label>
+                <input asp-for="DESCRIPTION_5" class="form-control" />
+                <span asp-validation-for="DESCRIPTION_5" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DESCRIPTION_6" class="control-label"></label>
+                <input asp-for="DESCRIPTION_6" class="form-control" />
+                <span asp-validation-for="DESCRIPTION_6" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LOGO" class="control-label"></label>
+                <input type="file" accept="image/*" asp-for="LOGO" class="form-control-file" multiple="multiple" />
+                <span asp-validation-for="LOGO" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
