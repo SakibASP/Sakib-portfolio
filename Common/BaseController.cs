@@ -31,7 +31,7 @@ namespace SAKIB_PORTFOLIO.Common
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            if (filterContext.HttpContext.User.Identity.IsAuthenticated)
+            if (filterContext.HttpContext.User.Identity!.IsAuthenticated)
             {
                 CurrentUserName = filterContext.HttpContext.User.Identity.Name;
                 CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
