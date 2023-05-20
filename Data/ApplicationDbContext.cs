@@ -32,5 +32,6 @@ namespace SAKIB_PORTFOLIO.Data
         public virtual DbSet<PROJECTS> PROJECTS { get; set; }
         public virtual DbSet<CONTACTS> CONTACTS { get; set; }
         public virtual DbSet<PROFILE_COVER> PROFILE_COVER { get; set; }
+        public virtual DbSet<ImageStore> ImageStore { get; set; }
     }
 }

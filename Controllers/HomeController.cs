@@ -45,13 +45,13 @@ namespace SAKIB_PORTFOLIO.Controllers
             //Using Sessions
             List<CONTACTS> myMessage = new();
             PROFILE_COVER? Cover = new();
-            if (S_CONTACTS.Any())
-                myMessage = S_CONTACTS.Where(x => x.IsConfirmed == null).ToList();
+            if (S_CONTACTS is not null)
+                myMessage = S_CONTACTS!.Where(x => x.IsConfirmed == null).ToList();
             else
                 myMessage = _context.CONTACTS.Where(x => x.IsConfirmed == null).ToList();
 
-            if (S_PROFILE_COVER.Any())
-                Cover = S_PROFILE_COVER.FirstOrDefault();
+            if (S_PROFILE_COVER is not null)
+                Cover = S_PROFILE_COVER!.FirstOrDefault();
             else
                 Cover = _context.PROFILE_COVER.FirstOrDefault();
 

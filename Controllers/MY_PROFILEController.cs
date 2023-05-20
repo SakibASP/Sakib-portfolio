@@ -38,15 +38,15 @@ namespace SAKIB_PORTFOLIO.Controllers
 
         public IActionResult About()
         {
-            if(S_MY_PROFILE.Any())
+            if(S_MY_PROFILE is not null)
                 pROFILE = S_MY_PROFILE.FirstOrDefault();
             else
                 pROFILE = _context.MY_PROFILE.FirstOrDefault();
 
-            if(S_MY_SKILLS.Any())
+            if(S_MY_SKILLS is not null)
                 sKILL = S_MY_SKILLS.ToList();
             else
-                sKILL = S_MY_SKILLS.ToList();
+                sKILL = _context.MY_SKILLS.ToList();
 
             ViewData["SKILLS"] = sKILL;
             ViewData["PROFILES"] = pROFILE;
@@ -55,17 +55,17 @@ namespace SAKIB_PORTFOLIO.Controllers
 
         public IActionResult Resume()
         {
-            if (S_MY_PROFILE.Any())
+            if (S_MY_PROFILE is not null)
                 pROFILE = S_MY_PROFILE.FirstOrDefault();
             else
                 pROFILE = _context.MY_PROFILE.FirstOrDefault();
 
-            if (S_EDUCATION.Any())
+            if (S_EDUCATION is not null)
                 eDUCATION = S_EDUCATION.ToList();
             else
                 eDUCATION = _context.EDUCATION.ToList();
 
-            if (S_EXPERIENCE.Any())
+            if (S_EXPERIENCE is not null)
                 eXPERIENCE = S_EXPERIENCE.ToList();
             else
                 eXPERIENCE = _context.EXPERIENCE.ToList();
@@ -78,12 +78,12 @@ namespace SAKIB_PORTFOLIO.Controllers
 
         public IActionResult Projects()
         {
-            if (S_MY_PROFILE.Any())
+            if (S_MY_PROFILE is not null)
                 pROFILE = S_MY_PROFILE.FirstOrDefault();
             else
                 pROFILE = _context.MY_PROFILE.FirstOrDefault();
 
-            if (S_PROJECTS.Any())
+            if (S_PROJECTS is not null)
                 pROJECT = S_PROJECTS.ToList();
             else
                 pROJECT = _context.PROJECTS.ToList();
@@ -106,7 +106,7 @@ namespace SAKIB_PORTFOLIO.Controllers
 
         public IActionResult Contact()
         {
-            if (S_MY_PROFILE.Any())
+            if (S_MY_PROFILE is not null)
                 pROFILE = S_MY_PROFILE.FirstOrDefault();
             else
                 pROFILE = _context.MY_PROFILE.FirstOrDefault();
