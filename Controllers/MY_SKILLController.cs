@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
@@ -13,11 +14,11 @@ using SAKIB_PORTFOLIO.Models;
 namespace SAKIB_PORTFOLIO.Controllers
 {
     [Authorize]
-    public class MY_SKILLController : Controller
+    public class MY_SKILLController : BaseController
     {
         private readonly ApplicationDbContext _context;
 
-        public MY_SKILLController(ApplicationDbContext context)
+        public MY_SKILLController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
         {
             _context = context;
         }
@@ -65,7 +66,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 _context.Add(mY_SKILLS);
                 await _context.SaveChangesAsync();
-                HttpContext.Session.Remove(Constant.mySkill);
+                _cache.Remove(Constant.mySkill);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -106,7 +107,7 @@ namespace SAKIB_PORTFOLIO.Controllers
                 {
                     _context.Update(mY_SKILLS);
                     await _context.SaveChangesAsync();
-                    HttpContext.Session.Remove(Constant.mySkill);
+                    _cache.Remove(Constant.mySkill);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -158,7 +159,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             
             await _context.SaveChangesAsync();
-            HttpContext.Session.Remove(Constant.mySkill);
+            _cache.Remove(Constant.mySkill);
 
             return RedirectToAction(nameof(Index));
         }

@@ -6,17 +6,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class PROJECTSController : Controller
+    public class PROJECTSController : BaseController
     {
         private readonly ApplicationDbContext _context;
 
-        public PROJECTSController(ApplicationDbContext context)
+        public PROJECTSController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
         {
             _context = context;
         }
@@ -72,7 +73,7 @@ namespace SAKIB_PORTFOLIO.Controllers
 
                 _context.Add(pROJECTS);
                 await _context.SaveChangesAsync();
-                HttpContext.Session.Remove(Constant.myProject);
+                _cache.Remove(Constant.myProject);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -121,7 +122,7 @@ namespace SAKIB_PORTFOLIO.Controllers
 
                     _context.Update(pROJECTS);
                     await _context.SaveChangesAsync();
-                    HttpContext.Session.Remove(Constant.myProject);
+                    _cache.Remove(Constant.myProject);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -175,7 +176,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             
             await _context.SaveChangesAsync();
-            HttpContext.Session.Remove(Constant.myProject);
+            _cache.Remove(Constant.myProject);
 
             return RedirectToAction(nameof(Index));
         }

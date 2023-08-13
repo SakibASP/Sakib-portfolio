@@ -6,23 +6,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class MY_PROFILEController : BaseController<MY_PROFILEController>
+    public class MY_PROFILEController : BaseController
     {
         private readonly ApplicationDbContext _context;
-        private MY_PROFILE? pROFILE;
-        private List<MY_SKILLS>? sKILL;
-        private List<EDUCATION>? eDUCATION;
-        private List<EXPERIENCE>? eXPERIENCE;
-        private List<PROJECTS>? pROJECT;
-
-
-        public MY_PROFILEController(ApplicationDbContext context)
+        public MY_PROFILEController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
         {
             _context = context;
         }
@@ -38,58 +32,23 @@ namespace SAKIB_PORTFOLIO.Controllers
 
         public IActionResult About()
         {
-            if(S_MY_PROFILE.Any())
-                pROFILE = S_MY_PROFILE.FirstOrDefault();
-            else
-                pROFILE = _context.MY_PROFILE.FirstOrDefault();
-
-            if(S_MY_SKILLS.Any())
-                sKILL = S_MY_SKILLS.ToList();
-            else
-                sKILL = S_MY_SKILLS.ToList();
-
-            ViewData["SKILLS"] = sKILL;
-            ViewData["PROFILES"] = pROFILE;
+            ViewData["SKILLS"] = S_MY_SKILLS;
+            ViewData["PROFILES"] = S_MY_PROFILE!.FirstOrDefault();
             return View();
         }
 
         public IActionResult Resume()
         {
-            if (S_MY_PROFILE.Any())
-                pROFILE = S_MY_PROFILE.FirstOrDefault();
-            else
-                pROFILE = _context.MY_PROFILE.FirstOrDefault();
-
-            if (S_EDUCATION.Any())
-                eDUCATION = S_EDUCATION.ToList();
-            else
-                eDUCATION = _context.EDUCATION.ToList();
-
-            if (S_EXPERIENCE.Any())
-                eXPERIENCE = S_EXPERIENCE.ToList();
-            else
-                eXPERIENCE = _context.EXPERIENCE.ToList();
-
-            ViewData["PROFILES"] = pROFILE;
-            ViewData["EDUCATIONS"] = eDUCATION;
-            ViewData["EXPERIENCEs"] = eXPERIENCE;
+            ViewData["PROFILES"] = S_MY_PROFILE!.FirstOrDefault();
+            ViewData["EDUCATIONS"] = S_EDUCATION;
+            ViewData["EXPERIENCEs"] = S_EXPERIENCE;
             return View();
         }
 
         public IActionResult Projects()
         {
-            if (S_MY_PROFILE.Any())
-                pROFILE = S_MY_PROFILE.FirstOrDefault();
-            else
-                pROFILE = _context.MY_PROFILE.FirstOrDefault();
-
-            if (S_PROJECTS.Any())
-                pROJECT = S_PROJECTS.ToList();
-            else
-                pROJECT = _context.PROJECTS.ToList();
-
-            ViewData["PROFILES"] = pROFILE;
-            ViewData["PROJECTS"] = pROJECT.Count > 0 ? pROJECT : null;
+            ViewData["PROFILES"] = S_MY_PROFILE!.FirstOrDefault();
+            ViewData["PROJECTS"] = S_PROJECTS;
             return View();
         }
 
@@ -106,12 +65,7 @@ namespace SAKIB_PORTFOLIO.Controllers
 
         public IActionResult Contact()
         {
-            if (S_MY_PROFILE.Any())
-                pROFILE = S_MY_PROFILE.FirstOrDefault();
-            else
-                pROFILE = _context.MY_PROFILE.FirstOrDefault();
-
-            ViewData["PROFILES"] = pROFILE;
+            ViewData["PROFILES"] = S_MY_PROFILE!.FirstOrDefault();
             return View();
         }
 
@@ -122,7 +76,9 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 _context.CONTACTS.Add(objContact);
                 _context.SaveChanges();
-                HttpContext.Session.Remove(Constant.myContact);
+                _cache.Remove(Constant.myContact);
+
+                //HttpContext.Session.Remove(Constant.myContact);
 
                 return Json(data: new { message = "Message Sent Successfully", status = true });
             }
@@ -226,7 +182,9 @@ namespace SAKIB_PORTFOLIO.Controllers
                     }
                     _context.Update(mY_PROFILE);
                     await _context.SaveChangesAsync();
-                    HttpContext.Session.Remove(Constant.myProfile);
+                    _cache.Remove(Constant.myProfile);
+
+                    //HttpContext.Session.Remove(Constant.myProfile);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -280,7 +238,10 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             
             await _context.SaveChangesAsync();
-            HttpContext.Session.Remove(Constant.myProfile);
+
+            _cache.Remove(Constant.myProfile);
+
+            //HttpContext.Session.Remove(Constant.myProfile);
             return RedirectToAction(nameof(Index));
         }
 
