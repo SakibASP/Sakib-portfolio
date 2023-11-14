@@ -24,20 +24,19 @@ namespace SAKIB_PORTFOLIO.Controllers
 
         public IActionResult Index()
         {
-            //Using Sessions
             List<CONTACTS> myMessage = new();
             PROFILE_COVER? Cover = new();
 
-            if(User.Identities.Any())
+            if (User.Identity!.IsAuthenticated)
             {
-                if (S_CONTACTS!.Any())
+                if (S_CONTACTS is not null)
                     myMessage = S_CONTACTS!.Where(x => x.IsConfirmed == null).ToList();
                 else
                     myMessage = _context.CONTACTS.Where(x => x.IsConfirmed == null).ToList();
                 TempData["Message"] = myMessage == null ? "" : myMessage.Count.ToString();
             }
 
-            if (S_PROFILE_COVER!.Any())
+            if (S_PROFILE_COVER is not null)
                 Cover = S_PROFILE_COVER!.FirstOrDefault();
             else
                 Cover = _context.PROFILE_COVER.FirstOrDefault();
