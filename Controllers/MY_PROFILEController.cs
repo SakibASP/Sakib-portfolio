@@ -100,41 +100,42 @@ namespace SAKIB_PORTFOLIO.Controllers
         //    return View(mY_PROFILE);
         //}
 
-        //[Authorize]
-        // GET: MY_PROFILE/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+        [Authorize]
+        //GET: MY_PROFILE/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-        // POST: MY_PROFILE/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[Authorize]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("AUTO_ID,MY_NAME,DESIGNATION,AGE,MY_WEBSITE,DEGREE,PHONE,EMAIL,CURRENT_CITY,HOMETOWN,PROFILE_IMAGE,DES_1,DES_2,DES_3,DATE_OF_BIRTH")] MY_PROFILE mY_PROFILE)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var imgFile = Request.Form.Files.FirstOrDefault();
-        //            if (imgFile != null)
-        //            {
-        //                mY_PROFILE.PROFILE_IMAGE = Utility.Getimage(mY_PROFILE.PROFILE_IMAGE, Request.Form.Files);
-        //            }
-        //            _context.Add(mY_PROFILE);
-        //            await _context.SaveChangesAsync();
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        //DO SOMTHING
-        //    }
-        //    return View(mY_PROFILE);
-        //}
+        //POST: MY_PROFILE/Create
+        //To protect from overposting attacks, enable the specific properties you want to bind to.
+        //For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("AUTO_ID,MY_NAME,DESIGNATION,AGE,MY_WEBSITE,DEGREE,PHONE,EMAIL,CURRENT_CITY,HOMETOWN,PROFILE_IMAGE,DES_1,DES_2,DES_3,DATE_OF_BIRTH")] MY_PROFILE mY_PROFILE)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var imgFile = Request.Form.Files.FirstOrDefault();
+                    if (imgFile != null)
+                    {
+                        mY_PROFILE.PROFILE_IMAGE = Utility.Getimage(mY_PROFILE.PROFILE_IMAGE, Request.Form.Files);
+                    }
+                    _context.Add(mY_PROFILE);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch
+            {
+                //DO SOMTHING
+            }
+            return View(mY_PROFILE);
+        }
 
         // GET: MY_PROFILE/Edit/5
         [Authorize]
