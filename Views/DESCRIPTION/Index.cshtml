@@ -1,0 +1,70 @@
+﻿@model IEnumerable<SAKIB_PORTFOLIO.Models.DESCRIPTION>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<section>
+    <div class="container-fluid p-5">
+        <h1>Index</h1>
+
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DESCRIPTION_TEXT)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TYPE)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CREATED_BY)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CREATED_DATE)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MODIFIED_BY)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MODIFIED_DATE)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DESCRIPTION_TEXT)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TYPE)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CREATED_BY)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CREATED_DATE)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MODIFIED_BY)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MODIFIED_DATE)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.AUTO_ID">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.AUTO_ID">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.AUTO_ID">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</section>
