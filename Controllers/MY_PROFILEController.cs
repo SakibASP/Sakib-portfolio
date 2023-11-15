@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using SAKIB_PORTFOLIO.Common;
@@ -30,25 +25,25 @@ namespace SAKIB_PORTFOLIO.Controllers
                           Problem("Entity set 'ApplicationDbContext.MY_PROFILE'  is null.");
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
-            ViewData["SKILLS"] = S_MY_SKILLS;
-            ViewData["PROFILES"] = S_MY_PROFILE!.FirstOrDefault();
+            ViewData["SKILLS"] = await _context.MY_SKILLS.AsNoTracking().ToListAsync();
+            ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
             return View();
         }
 
-        public IActionResult Resume()
+        public async Task<IActionResult> Resume()
         {
-            ViewData["PROFILES"] = S_MY_PROFILE!.FirstOrDefault();
-            ViewData["EDUCATIONS"] = S_EDUCATION;
-            ViewData["EXPERIENCEs"] = S_EXPERIENCE;
+            ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
+            ViewData["EDUCATIONS"] = await _context.EDUCATION.AsNoTracking().ToListAsync(); 
+            ViewData["EXPERIENCEs"] = await _context.EXPERIENCE.AsNoTracking().ToListAsync(); 
             return View();
         }
 
-        public IActionResult Projects()
+        public async Task<IActionResult> Projects()
         {
-            ViewData["PROFILES"] = S_MY_PROFILE!.FirstOrDefault();
-            ViewData["PROJECTS"] = S_PROJECTS;
+            ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
+            ViewData["PROJECTS"] = await _context.PROJECTS.AsNoTracking().ToListAsync();
             return View();
         }
 
@@ -63,9 +58,9 @@ namespace SAKIB_PORTFOLIO.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
-            ViewData["PROFILES"] = S_MY_PROFILE!.FirstOrDefault();
+            ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
             return View();
         }
 

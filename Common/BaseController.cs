@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Build.Construction;
 using Microsoft.Extensions.Caching.Memory;
 using SAKIB_PORTFOLIO.Data;
-using SAKIB_PORTFOLIO.Helper;
-using SAKIB_PORTFOLIO.Models;
-using System.Reflection.Metadata;
 using System.Security.Claims;
 
 namespace SAKIB_PORTFOLIO.Common
@@ -27,13 +23,13 @@ namespace SAKIB_PORTFOLIO.Common
 
         public string? CurrentUserId { get; set; }
         public string? CurrentUserName { get; set; }
-        public List<MY_PROFILE>? S_MY_PROFILE { get; set; }
-        public List<PROFILE_COVER>? S_PROFILE_COVER { get; set; }
-        public List<PROJECTS>? S_PROJECTS { get; set; }
-        public List<EDUCATION>? S_EDUCATION { get; set; }
-        public List<EXPERIENCE>? S_EXPERIENCE { get; set; }
-        public List<CONTACTS>? S_CONTACTS { get; set; }
-        public List<MY_SKILLS>? S_MY_SKILLS { get; set; }
+        //public List<MY_PROFILE>? S_MY_PROFILE { get; set; }
+        //public List<PROFILE_COVER>? S_PROFILE_COVER { get; set; }
+        //public List<PROJECTS>? S_PROJECTS { get; set; }
+        //public List<EDUCATION>? S_EDUCATION { get; set; }
+        //public List<EXPERIENCE>? S_EXPERIENCE { get; set; }
+        //public List<CONTACTS>? S_CONTACTS { get; set; }
+        //public List<MY_SKILLS>? S_MY_SKILLS { get; set; }
 
         private ApplicationDbContext _context = new();
 
@@ -47,149 +43,148 @@ namespace SAKIB_PORTFOLIO.Common
             }
 
             //Populating the caches
-
             //My Profile Part
-            if (!_cache.TryGetValue(Constant.myProfile, out List<MY_PROFILE> _MY_PROFILE))
-            {
-                // If not found in cache, fetch from the database
-                _MY_PROFILE = _context.MY_PROFILE.ToList();
+            //if (!_cache.TryGetValue(Constant.myProfile, out List<MY_PROFILE> _MY_PROFILE))
+            //{
+            //    // If not found in cache, fetch from the database
+            //    _MY_PROFILE = _context.MY_PROFILE.ToList();
 
-                if (_MY_PROFILE != null)
-                {
-                    // Set up cache options
-                    var cacheEntryOptions = new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
-                        SlidingExpiration = TimeSpan.FromMinutes(5)
-                    };
-                    // Cache the fetched item
-                    _cache.Set(Constant.myProfile, _MY_PROFILE, cacheEntryOptions);
-                }
-            }
+            //    if (_MY_PROFILE != null)
+            //    {
+            //        // Set up cache options
+            //        var cacheEntryOptions = new MemoryCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+            //            SlidingExpiration = TimeSpan.FromMinutes(5)
+            //        };
+            //        // Cache the fetched item
+            //        _cache.Set(Constant.myProfile, _MY_PROFILE, cacheEntryOptions);
+            //    }
+            //}
 
-            //Cover Part
-            if (!_cache.TryGetValue(Constant.myProfileCover, out List<PROFILE_COVER> _PROFILE_COVER))
-            {
-                // If not found in cache, fetch from the database
-                _PROFILE_COVER = _context.PROFILE_COVER.ToList();
+            ////Cover Part
+            //if (!_cache.TryGetValue(Constant.myProfileCover, out List<PROFILE_COVER> _PROFILE_COVER))
+            //{
+            //    // If not found in cache, fetch from the database
+            //    _PROFILE_COVER = _context.PROFILE_COVER.ToList();
 
-                if (_PROFILE_COVER != null)
-                {
-                    // Set up cache options
-                    var cacheEntryOptions = new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
-                        SlidingExpiration = TimeSpan.FromMinutes(5)
-                    };
-                    // Cache the fetched item
-                    _cache.Set(Constant.myProfileCover, _PROFILE_COVER, cacheEntryOptions);
-                }   
-            }
+            //    if (_PROFILE_COVER != null)
+            //    {
+            //        // Set up cache options
+            //        var cacheEntryOptions = new MemoryCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+            //            SlidingExpiration = TimeSpan.FromMinutes(5)
+            //        };
+            //        // Cache the fetched item
+            //        _cache.Set(Constant.myProfileCover, _PROFILE_COVER, cacheEntryOptions);
+            //    }   
+            //}
 
-            //Project Part
-            if (!_cache.TryGetValue(Constant.myProject, out List<PROJECTS> _PROJECTS))
-            {
-                // If not found in cache, fetch from the database
-                _PROJECTS = _context.PROJECTS.ToList();
+            ////Project Part
+            //if (!_cache.TryGetValue(Constant.myProject, out List<PROJECTS> _PROJECTS))
+            //{
+            //    // If not found in cache, fetch from the database
+            //    _PROJECTS = _context.PROJECTS.ToList();
 
-                if (_PROJECTS != null)
-                {
-                    // Set up cache options
-                    var cacheEntryOptions = new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
-                        SlidingExpiration = TimeSpan.FromMinutes(5)
-                    };
-                    // Cache the fetched item
-                    _cache.Set(Constant.myProject, _PROJECTS, cacheEntryOptions);
-                }
-            }
+            //    if (_PROJECTS != null)
+            //    {
+            //        // Set up cache options
+            //        var cacheEntryOptions = new MemoryCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+            //            SlidingExpiration = TimeSpan.FromMinutes(5)
+            //        };
+            //        // Cache the fetched item
+            //        _cache.Set(Constant.myProject, _PROJECTS, cacheEntryOptions);
+            //    }
+            //}
 
-            //Education Part
-            if (!_cache.TryGetValue(Constant.myEducation, out List<EDUCATION> _EDUCATION))
-            {
-                // If not found in cache, fetch from the database
-                _EDUCATION = _context.EDUCATION.ToList();
+            ////Education Part
+            //if (!_cache.TryGetValue(Constant.myEducation, out List<EDUCATION> _EDUCATION))
+            //{
+            //    // If not found in cache, fetch from the database
+            //    _EDUCATION = _context.EDUCATION.ToList();
 
-                if (_EDUCATION != null)
-                {
-                    // Set up cache options
-                    var cacheEntryOptions = new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
-                        SlidingExpiration = TimeSpan.FromMinutes(5)
-                    };
-                    // Cache the fetched item
-                    _cache.Set(Constant.myEducation, _EDUCATION, cacheEntryOptions);
-                }
-            }
+            //    if (_EDUCATION != null)
+            //    {
+            //        // Set up cache options
+            //        var cacheEntryOptions = new MemoryCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+            //            SlidingExpiration = TimeSpan.FromMinutes(5)
+            //        };
+            //        // Cache the fetched item
+            //        _cache.Set(Constant.myEducation, _EDUCATION, cacheEntryOptions);
+            //    }
+            //}
 
-            //Experience Part
-            if (!_cache.TryGetValue(Constant.myExperience, out List<EXPERIENCE> _EXPERIENCE))
-            {
-                // If not found in cache, fetch from the database
-                _EXPERIENCE = _context.EXPERIENCE.ToList();
+            ////Experience Part
+            //if (!_cache.TryGetValue(Constant.myExperience, out List<EXPERIENCE> _EXPERIENCE))
+            //{
+            //    // If not found in cache, fetch from the database
+            //    _EXPERIENCE = _context.EXPERIENCE.ToList();
 
-                if (_EXPERIENCE != null)
-                {
-                    // Set up cache options
-                    var cacheEntryOptions = new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
-                        SlidingExpiration = TimeSpan.FromMinutes(5)
-                    };
-                    // Cache the fetched item
-                    _cache.Set(Constant.myExperience, _EXPERIENCE, cacheEntryOptions);
-                }
-            }
+            //    if (_EXPERIENCE != null)
+            //    {
+            //        // Set up cache options
+            //        var cacheEntryOptions = new MemoryCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+            //            SlidingExpiration = TimeSpan.FromMinutes(5)
+            //        };
+            //        // Cache the fetched item
+            //        _cache.Set(Constant.myExperience, _EXPERIENCE, cacheEntryOptions);
+            //    }
+            //}
 
-            //Skill part
-            if (!_cache.TryGetValue(Constant.mySkill, out List<MY_SKILLS> _MY_SKILLS))
-            {
-                // If not found in cache, fetch from the database
-                _MY_SKILLS = _context.MY_SKILLS.ToList();
+            ////Skill part
+            //if (!_cache.TryGetValue(Constant.mySkill, out List<MY_SKILLS> _MY_SKILLS))
+            //{
+            //    // If not found in cache, fetch from the database
+            //    _MY_SKILLS = _context.MY_SKILLS.ToList();
 
-                if (_MY_SKILLS != null)
-                {
-                    // Set up cache options
-                    var cacheEntryOptions = new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
-                        SlidingExpiration = TimeSpan.FromMinutes(5)
-                    };
-                    // Cache the fetched item
-                    _cache.Set(Constant.mySkill, _MY_SKILLS, cacheEntryOptions);
-                }
-            }
+            //    if (_MY_SKILLS != null)
+            //    {
+            //        // Set up cache options
+            //        var cacheEntryOptions = new MemoryCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+            //            SlidingExpiration = TimeSpan.FromMinutes(5)
+            //        };
+            //        // Cache the fetched item
+            //        _cache.Set(Constant.mySkill, _MY_SKILLS, cacheEntryOptions);
+            //    }
+            //}
 
-            //Contact part
-            if (!_cache.TryGetValue(Constant.myContact, out List<CONTACTS> _CONTACTS))
-            {
-                // If not found in cache, fetch from the database
-                _CONTACTS = _context.CONTACTS.ToList();
+            ////Contact part
+            //if (!_cache.TryGetValue(Constant.myContact, out List<CONTACTS> _CONTACTS))
+            //{
+            //    // If not found in cache, fetch from the database
+            //    _CONTACTS = _context.CONTACTS.ToList();
 
-                if (_MY_SKILLS != null)
-                {
-                    // Set up cache options
-                    var cacheEntryOptions = new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
-                        SlidingExpiration = TimeSpan.FromMinutes(5)
-                    };
-                    // Cache the fetched item
-                    _cache.Set(Constant.myContact, _CONTACTS, cacheEntryOptions);
-                }
+            //    if (_MY_SKILLS != null)
+            //    {
+            //        // Set up cache options
+            //        var cacheEntryOptions = new MemoryCacheEntryOptions
+            //        {
+            //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+            //            SlidingExpiration = TimeSpan.FromMinutes(5)
+            //        };
+            //        // Cache the fetched item
+            //        _cache.Set(Constant.myContact, _CONTACTS, cacheEntryOptions);
+            //    }
 
-            }
+            //}
 
-            //Putting caches in global variables
-            S_MY_PROFILE = _MY_PROFILE;
-            S_PROFILE_COVER = _PROFILE_COVER;
-            S_PROJECTS = _PROJECTS;
-            S_EDUCATION = _EDUCATION;
-            S_EXPERIENCE = _EXPERIENCE;
-            S_MY_SKILLS = _MY_SKILLS;
-            S_CONTACTS = _CONTACTS;
+            ////Putting caches in global variables
+            //S_MY_PROFILE = _MY_PROFILE;
+            //S_PROFILE_COVER = _PROFILE_COVER;
+            //S_PROJECTS = _PROJECTS;
+            //S_EDUCATION = _EDUCATION;
+            //S_EXPERIENCE = _EXPERIENCE;
+            //S_MY_SKILLS = _MY_SKILLS;
+            //S_CONTACTS = _CONTACTS;
 
             //Other way of setting cache
             //Using Memory Cache

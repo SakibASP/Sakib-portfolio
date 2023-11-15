@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.VisualBasic;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
@@ -22,28 +21,25 @@ namespace SAKIB_PORTFOLIO.Controllers
             _memoryCache = memoryCache;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<CONTACTS> myMessage = new();
-            PROFILE_COVER? Cover = new();
-
             if (User.Identity!.IsAuthenticated)
             {
-                if (S_CONTACTS is not null)
-                    myMessage = S_CONTACTS!.Where(x => x.IsConfirmed == null).ToList();
-                else
-                    myMessage = _context.CONTACTS.Where(x => x.IsConfirmed == null).ToList();
+                //if (S_CONTACTS is not null)
+                //    myMessage = S_CONTACTS!.Where(x => x.IsConfirmed == null).ToList();
+                //else
+                var myMessage = await _context.CONTACTS.Where(x => x.IsConfirmed == null).ToListAsync();
                 TempData["Message"] = myMessage == null ? "" : myMessage.Count.ToString();
             }
 
-            if (S_PROFILE_COVER is not null)
-                Cover = S_PROFILE_COVER!.FirstOrDefault();
-            else
-                Cover = _context.PROFILE_COVER.FirstOrDefault();
+            //if (S_PROFILE_COVER is not null)
+            //    Cover = S_PROFILE_COVER!.FirstOrDefault();
+            //else
+            var cover = await _context.PROFILE_COVER.FirstOrDefaultAsync();
 
             ViewBag.Name = "Md. Sakibur Rahman";
             ViewBag.Bio = "I am a professiona Software Developer from Khulna, Bangladesh";
-            ViewBag.Cover = Cover;
+            ViewBag.Cover = cover;
             return View();
         }
 
