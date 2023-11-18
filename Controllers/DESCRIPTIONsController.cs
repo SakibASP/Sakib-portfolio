@@ -10,22 +10,23 @@ using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class DESCRIPTIONController : Controller
+    public class DESCRIPTIONsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public DESCRIPTIONController(ApplicationDbContext context)
+        public DESCRIPTIONsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: DESCRIPTION
+        // GET: DESCRIPTIONs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.DESCRIPTION.ToListAsync());
+            var applicationDbContext = _context.DESCRIPTION.Include(d => d.DESCRIPTION_TYPE_);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: DESCRIPTION/Details/5
+        // GET: DESCRIPTIONs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,6 +35,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
 
             var dESCRIPTION = await _context.DESCRIPTION
+                .Include(d => d.DESCRIPTION_TYPE_)
                 .FirstOrDefaultAsync(m => m.AUTO_ID == id);
             if (dESCRIPTION == null)
             {
@@ -43,18 +45,19 @@ namespace SAKIB_PORTFOLIO.Controllers
             return View(dESCRIPTION);
         }
 
-        // GET: DESCRIPTION/Create
+        // GET: DESCRIPTIONs/Create
         public IActionResult Create()
         {
+            ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE");
             return View();
         }
 
-        // POST: DESCRIPTION/Create
+        // POST: DESCRIPTIONs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AUTO_ID,DESCRIPTION_TEXT,TYPE,CREATED_BY,CREATED_DATE,MODIFIED_BY,MODIFIED_DATE")] DESCRIPTION dESCRIPTION)
+        public async Task<IActionResult> Create([Bind("AUTO_ID,DESCRIPTION_TEXT,TYPE_ID,CREATED_BY,CREATED_DATE,MODIFIED_BY,MODIFIED_DATE,SORT_ORDER")] DESCRIPTION dESCRIPTION)
         {
             if (ModelState.IsValid)
             {
@@ -64,10 +67,11 @@ namespace SAKIB_PORTFOLIO.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE", dESCRIPTION.TYPE_ID);
             return View(dESCRIPTION);
         }
 
-        // GET: DESCRIPTION/Edit/5
+        // GET: DESCRIPTIONs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,15 +84,16 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 return NotFound();
             }
+            ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE", dESCRIPTION.TYPE_ID);
             return View(dESCRIPTION);
         }
 
-        // POST: DESCRIPTION/Edit/5
+        // POST: DESCRIPTIONs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,DESCRIPTION_TEXT,TYPE,CREATED_BY,CREATED_DATE,MODIFIED_BY,MODIFIED_DATE")] DESCRIPTION dESCRIPTION)
+        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,DESCRIPTION_TEXT,TYPE_ID,CREATED_BY,CREATED_DATE,MODIFIED_BY,MODIFIED_DATE,SORT_ORDER")] DESCRIPTION dESCRIPTION)
         {
             if (id != dESCRIPTION.AUTO_ID)
             {
@@ -117,10 +122,11 @@ namespace SAKIB_PORTFOLIO.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE", dESCRIPTION.TYPE_ID);
             return View(dESCRIPTION);
         }
 
-        // GET: DESCRIPTION/Delete/5
+        // GET: DESCRIPTIONs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,6 +135,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
 
             var dESCRIPTION = await _context.DESCRIPTION
+                .Include(d => d.DESCRIPTION_TYPE_)
                 .FirstOrDefaultAsync(m => m.AUTO_ID == id);
             if (dESCRIPTION == null)
             {
@@ -138,7 +145,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             return View(dESCRIPTION);
         }
 
-        // POST: DESCRIPTION/Delete/5
+        // POST: DESCRIPTIONs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

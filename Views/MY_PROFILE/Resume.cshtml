@@ -7,6 +7,7 @@
     MY_PROFILE? mY_PROFILEs = ViewData["PROFILES"] as MY_PROFILE;
     List<EDUCATION>? eDUCATIONs = ViewData["EDUCATIONS"] as List<EDUCATION>;
     List<EXPERIENCE>? eXPERIENCEs = ViewData["EXPERIENCEs"] as List<EXPERIENCE>;
+    List<DESCRIPTION>? dESCRIPTIONs = ViewData["DESCRIPTIONs"] as List<DESCRIPTION>;
 }
 
 <main id="main">
@@ -73,12 +74,16 @@
                                 <h5>@item.FROM_DATE - @item.TO_DATE</h5>
                                 <p><em>@item.INSTITUTE</em></p>
                                 <p>
-                                    <ul>
-                                        <li>@item.DES_1</li>
-                                        <li>@item.DES_2</li>
-                                        <li>@item.DES_3</li>
-                                        <li>@item.DES_4</li>
-                                    </ul>
+                                    @if(dESCRIPTIONs != null)
+                                    {
+                                        foreach(var desc in dESCRIPTIONs)
+                                        {
+                                            <ul>
+                                                <li>@desc.DESCRIPTION_TEXT</li>
+                                            </ul>
+                                        }
+                                    }
+
                                 </p>
                             </div>
                         }

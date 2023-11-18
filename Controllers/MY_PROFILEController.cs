@@ -36,7 +36,8 @@ namespace SAKIB_PORTFOLIO.Controllers
         {
             ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
             ViewData["EDUCATIONS"] = await _context.EDUCATION.AsNoTracking().ToListAsync(); 
-            ViewData["EXPERIENCEs"] = await _context.EXPERIENCE.AsNoTracking().ToListAsync(); 
+            ViewData["EXPERIENCEs"] = await _context.EXPERIENCE.AsNoTracking().ToListAsync();
+            ViewData["DESCRIPTIONs"] = await _context.DESCRIPTION.AsNoTracking().Where(x => x.DESCRIPTION_TYPE_!.TYPE!.Equals("Experience")).ToListAsync();
             return View();
         }
 

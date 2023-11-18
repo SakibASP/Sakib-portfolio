@@ -15,7 +15,7 @@ namespace SAKIB_PORTFOLIO.Models
         [DisplayName("Description")]
         public string? DESCRIPTION_TEXT { get; set; }
         [DisplayName("Type")]
-        public string? TYPE { get; set; }
+        public int? TYPE_ID { get; set; }
         [DisplayName("Created By")]
         public string? CREATED_BY { get; set; }
         [DisplayName("Created Date")]
@@ -24,5 +24,9 @@ namespace SAKIB_PORTFOLIO.Models
         public string? MODIFIED_BY { get; set; }
         [DisplayName("Modified Date")]
         public DateTime? MODIFIED_DATE { get; set; }
+        [DisplayName("Order")]
+        public int? SORT_ORDER { get; set; }
+        [ForeignKey(nameof(TYPE_ID))]
+        public virtual DESCRIPTION_TYPE? DESCRIPTION_TYPE_ { get; set; }
     }
 }
