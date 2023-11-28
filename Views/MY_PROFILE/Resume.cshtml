@@ -76,8 +76,8 @@
                                 <p>
                                     @if(dESCRIPTIONs != null)
                                     {
-                                        foreach(var desc in dESCRIPTIONs)
-                                        {
+                                        foreach (var desc in dESCRIPTIONs.Where(d=>d.DESCRIPTION_TYPE_!.TYPE!.Equals("Experience")))
+                                            {
                                             <ul>
                                                 <li>@desc.DESCRIPTION_TEXT</li>
                                             </ul>
