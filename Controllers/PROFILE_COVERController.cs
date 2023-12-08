@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
@@ -13,11 +14,11 @@ using SAKIB_PORTFOLIO.Models;
 namespace SAKIB_PORTFOLIO.Controllers
 {
     [Authorize]
-    public class PROFILE_COVERController : Controller
+    public class PROFILE_COVERController : BaseController
     {
         private readonly ApplicationDbContext _context;
 
-        public PROFILE_COVERController(ApplicationDbContext context)
+        public PROFILE_COVERController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
         {
             _context = context;
         }
@@ -70,7 +71,7 @@ namespace SAKIB_PORTFOLIO.Controllers
                     }
                     _context.Add(pROFILE_COVER);
                     await _context.SaveChangesAsync();
-                    HttpContext.Session.Remove(Constant.myProfileCover);
+                    _cache.Remove(Constant.myProfileCover);
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -121,7 +122,7 @@ namespace SAKIB_PORTFOLIO.Controllers
                     }
                     _context.Update(pROFILE_COVER);
                     await _context.SaveChangesAsync();
-                    HttpContext.Session.Remove(Constant.myProfileCover);
+                    _cache.Remove(Constant.myProfileCover);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -32,6 +32,7 @@ namespace SAKIB_PORTFOLIO.Data
         public virtual DbSet<PROJECTS> PROJECTS { get; set; }
         public virtual DbSet<CONTACTS> CONTACTS { get; set; }
         public virtual DbSet<PROFILE_COVER> PROFILE_COVER { get; set; }
-        public virtual DbSet<ImageStore> ImageStore { get; set; }
+        public DbSet<SAKIB_PORTFOLIO.Models.DESCRIPTION> DESCRIPTION { get; set; } = default!;
+        public DbSet<SAKIB_PORTFOLIO.Models.DESCRIPTION_TYPE> DESCRIPTION_TYPE { get; set; } = default!;
     }
 }

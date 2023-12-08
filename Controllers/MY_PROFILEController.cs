@@ -1,28 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class MY_PROFILEController : BaseController<MY_PROFILEController>
+    public class MY_PROFILEController : BaseController
     {
         private readonly ApplicationDbContext _context;
-        private MY_PROFILE? pROFILE;
-        private List<MY_SKILLS>? sKILL;
-        private List<EDUCATION>? eDUCATION;
-        private List<EXPERIENCE>? eXPERIENCE;
-        private List<PROJECTS>? pROJECT;
-
-
-        public MY_PROFILEController(ApplicationDbContext context)
+        public MY_PROFILEController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
         {
             _context = context;
         }
@@ -36,60 +25,26 @@ namespace SAKIB_PORTFOLIO.Controllers
                           Problem("Entity set 'ApplicationDbContext.MY_PROFILE'  is null.");
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
-            if(S_MY_PROFILE is not null)
-                pROFILE = S_MY_PROFILE.FirstOrDefault();
-            else
-                pROFILE = _context.MY_PROFILE.FirstOrDefault();
-
-            if(S_MY_SKILLS is not null)
-                sKILL = S_MY_SKILLS.ToList();
-            else
-                sKILL = _context.MY_SKILLS.ToList();
-
-            ViewData["SKILLS"] = sKILL;
-            ViewData["PROFILES"] = pROFILE;
+            ViewData["SKILLS"] = await _context.MY_SKILLS.AsNoTracking().ToListAsync();
+            ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
             return View();
         }
 
-        public IActionResult Resume()
+        public async Task<IActionResult> Resume()
         {
-            if (S_MY_PROFILE is not null)
-                pROFILE = S_MY_PROFILE.FirstOrDefault();
-            else
-                pROFILE = _context.MY_PROFILE.FirstOrDefault();
-
-            if (S_EDUCATION is not null)
-                eDUCATION = S_EDUCATION.ToList();
-            else
-                eDUCATION = _context.EDUCATION.ToList();
-
-            if (S_EXPERIENCE is not null)
-                eXPERIENCE = S_EXPERIENCE.ToList();
-            else
-                eXPERIENCE = _context.EXPERIENCE.ToList();
-
-            ViewData["PROFILES"] = pROFILE;
-            ViewData["EDUCATIONS"] = eDUCATION;
-            ViewData["EXPERIENCEs"] = eXPERIENCE;
+            ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
+            ViewData["EDUCATIONS"] = await _context.EDUCATION.AsNoTracking().ToListAsync(); 
+            ViewData["EXPERIENCEs"] = await _context.EXPERIENCE.AsNoTracking().ToListAsync();
+            ViewData["DESCRIPTIONs"] = await _context.DESCRIPTION.Include(x=>x.DESCRIPTION_TYPE_).AsNoTracking().ToListAsync();
             return View();
         }
 
-        public IActionResult Projects()
+        public async Task<IActionResult> Projects()
         {
-            if (S_MY_PROFILE is not null)
-                pROFILE = S_MY_PROFILE.FirstOrDefault();
-            else
-                pROFILE = _context.MY_PROFILE.FirstOrDefault();
-
-            if (S_PROJECTS is not null)
-                pROJECT = S_PROJECTS.ToList();
-            else
-                pROJECT = _context.PROJECTS.ToList();
-
-            ViewData["PROFILES"] = pROFILE;
-            ViewData["PROJECTS"] = pROJECT.Count > 0 ? pROJECT : null;
+            ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
+            ViewData["PROJECTS"] = await _context.PROJECTS.AsNoTracking().ToListAsync();
             return View();
         }
 
@@ -104,14 +59,9 @@ namespace SAKIB_PORTFOLIO.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
-            if (S_MY_PROFILE is not null)
-                pROFILE = S_MY_PROFILE.FirstOrDefault();
-            else
-                pROFILE = _context.MY_PROFILE.FirstOrDefault();
-
-            ViewData["PROFILES"] = pROFILE;
+            ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
             return View();
         }
 
@@ -122,7 +72,9 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 _context.CONTACTS.Add(objContact);
                 _context.SaveChanges();
-                HttpContext.Session.Remove(Constant.myContact);
+                _cache.Remove(Constant.myContact);
+
+                //HttpContext.Session.Remove(Constant.myContact);
 
                 return Json(data: new { message = "Message Sent Successfully", status = true });
             }
@@ -149,41 +101,42 @@ namespace SAKIB_PORTFOLIO.Controllers
         //    return View(mY_PROFILE);
         //}
 
-        //[Authorize]
-        // GET: MY_PROFILE/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+        [Authorize]
+        //GET: MY_PROFILE/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-        // POST: MY_PROFILE/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[Authorize]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("AUTO_ID,MY_NAME,DESIGNATION,AGE,MY_WEBSITE,DEGREE,PHONE,EMAIL,CURRENT_CITY,HOMETOWN,PROFILE_IMAGE,DES_1,DES_2,DES_3,DATE_OF_BIRTH")] MY_PROFILE mY_PROFILE)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var imgFile = Request.Form.Files.FirstOrDefault();
-        //            if (imgFile != null)
-        //            {
-        //                mY_PROFILE.PROFILE_IMAGE = Utility.Getimage(mY_PROFILE.PROFILE_IMAGE, Request.Form.Files);
-        //            }
-        //            _context.Add(mY_PROFILE);
-        //            await _context.SaveChangesAsync();
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        //DO SOMTHING
-        //    }
-        //    return View(mY_PROFILE);
-        //}
+        //POST: MY_PROFILE/Create
+        //To protect from overposting attacks, enable the specific properties you want to bind to.
+        //For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("AUTO_ID,MY_NAME,DESIGNATION,AGE,MY_WEBSITE,DEGREE,PHONE,EMAIL,CURRENT_CITY,HOMETOWN,PROFILE_IMAGE,DES_1,DES_2,DES_3,DATE_OF_BIRTH")] MY_PROFILE mY_PROFILE)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var imgFile = Request.Form.Files.FirstOrDefault();
+                    if (imgFile != null)
+                    {
+                        mY_PROFILE.PROFILE_IMAGE = Utility.Getimage(mY_PROFILE.PROFILE_IMAGE, Request.Form.Files);
+                    }
+                    _context.Add(mY_PROFILE);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch
+            {
+                //DO SOMTHING
+            }
+            return View(mY_PROFILE);
+        }
 
         // GET: MY_PROFILE/Edit/5
         [Authorize]
@@ -226,7 +179,9 @@ namespace SAKIB_PORTFOLIO.Controllers
                     }
                     _context.Update(mY_PROFILE);
                     await _context.SaveChangesAsync();
-                    HttpContext.Session.Remove(Constant.myProfile);
+                    _cache.Remove(Constant.myProfile);
+
+                    //HttpContext.Session.Remove(Constant.myProfile);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -280,7 +235,10 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             
             await _context.SaveChangesAsync();
-            HttpContext.Session.Remove(Constant.myProfile);
+
+            _cache.Remove(Constant.myProfile);
+
+            //HttpContext.Session.Remove(Constant.myProfile);
             return RedirectToAction(nameof(Index));
         }
 

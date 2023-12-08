@@ -1,12 +1,11 @@
-﻿@model IEnumerable<SAKIB_PORTFOLIO.Models.MY_SKILLS>
+﻿@model IEnumerable<SAKIB_PORTFOLIO.Models.DESCRIPTION_TYPE>
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <section>
-    <div class="container-fluid p-5">
+    <div class="container-fluid py-5">
         <h1>Index</h1>
 
         <p>
@@ -16,10 +15,7 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.SKILL_NAME)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.SKILL_PERCENTAGE)
+                        @Html.DisplayNameFor(model => model.TYPE)
                     </th>
                     <th></th>
                 </tr>
@@ -29,10 +25,7 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.SKILL_NAME)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SKILL_PERCENTAGE)
+                            @Html.DisplayFor(modelItem => item.TYPE)
                         </td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.AUTO_ID">Edit</a> |

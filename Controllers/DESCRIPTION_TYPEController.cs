@@ -1,97 +1,94 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    [Authorize]
-    public class MY_SKILLController : BaseController
+    public class DESCRIPTION_TYPEController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public MY_SKILLController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
+        public DESCRIPTION_TYPEController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: MY_SKILL
+        // GET: DESCRIPTION_TYPE
         public async Task<IActionResult> Index()
         {
-              return _context.MY_SKILLS != null ? 
-                          View(await _context.MY_SKILLS.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.MY_SKILLS'  is null.");
+            return View(await _context.DESCRIPTION_TYPE.ToListAsync());
         }
 
-        // GET: MY_SKILL/Details/5
+        // GET: DESCRIPTION_TYPE/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.MY_SKILLS == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var mY_SKILLS = await _context.MY_SKILLS
+            var dESCRIPTION_TYPE = await _context.DESCRIPTION_TYPE
                 .FirstOrDefaultAsync(m => m.AUTO_ID == id);
-            if (mY_SKILLS == null)
+            if (dESCRIPTION_TYPE == null)
             {
                 return NotFound();
             }
 
-            return View(mY_SKILLS);
+            return View(dESCRIPTION_TYPE);
         }
 
-        // GET: MY_SKILL/Create
+        // GET: DESCRIPTION_TYPE/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: MY_SKILL/Create
+        // POST: DESCRIPTION_TYPE/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AUTO_ID,SKILL_NAME,SKILL_PERCENTAGE")] MY_SKILLS mY_SKILLS)
+        public async Task<IActionResult> Create([Bind("AUTO_ID,TYPE")] DESCRIPTION_TYPE dESCRIPTION_TYPE)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(mY_SKILLS);
+                _context.Add(dESCRIPTION_TYPE);
                 await _context.SaveChangesAsync();
-                _cache.Remove(Constant.mySkill);
-
                 return RedirectToAction(nameof(Index));
             }
-            return View(mY_SKILLS);
+            return View(dESCRIPTION_TYPE);
         }
 
-        // GET: MY_SKILL/Edit/5
+        // GET: DESCRIPTION_TYPE/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.MY_SKILLS == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var mY_SKILLS = await _context.MY_SKILLS.FindAsync(id);
-            if (mY_SKILLS == null)
+            var dESCRIPTION_TYPE = await _context.DESCRIPTION_TYPE.FindAsync(id);
+            if (dESCRIPTION_TYPE == null)
             {
                 return NotFound();
             }
-            return View(mY_SKILLS);
+            return View(dESCRIPTION_TYPE);
         }
 
-        // POST: MY_SKILL/Edit/5
+        // POST: DESCRIPTION_TYPE/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,SKILL_NAME,SKILL_PERCENTAGE")] MY_SKILLS mY_SKILLS)
+        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,TYPE")] DESCRIPTION_TYPE dESCRIPTION_TYPE)
         {
-            if (id != mY_SKILLS.AUTO_ID)
+            if (id != dESCRIPTION_TYPE.AUTO_ID)
             {
                 return NotFound();
             }
@@ -100,13 +97,12 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 try
                 {
-                    _context.Update(mY_SKILLS);
+                    _context.Update(dESCRIPTION_TYPE);
                     await _context.SaveChangesAsync();
-                    _cache.Remove(Constant.mySkill);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MY_SKILLSExists(mY_SKILLS.AUTO_ID))
+                    if (!DESCRIPTION_TYPEExists(dESCRIPTION_TYPE.AUTO_ID))
                     {
                         return NotFound();
                     }
@@ -117,51 +113,45 @@ namespace SAKIB_PORTFOLIO.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(mY_SKILLS);
+            return View(dESCRIPTION_TYPE);
         }
 
-        // GET: MY_SKILL/Delete/5
+        // GET: DESCRIPTION_TYPE/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.MY_SKILLS == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var mY_SKILLS = await _context.MY_SKILLS
+            var dESCRIPTION_TYPE = await _context.DESCRIPTION_TYPE
                 .FirstOrDefaultAsync(m => m.AUTO_ID == id);
-            if (mY_SKILLS == null)
+            if (dESCRIPTION_TYPE == null)
             {
                 return NotFound();
             }
 
-            return View(mY_SKILLS);
+            return View(dESCRIPTION_TYPE);
         }
 
-        // POST: MY_SKILL/Delete/5
+        // POST: DESCRIPTION_TYPE/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.MY_SKILLS == null)
+            var dESCRIPTION_TYPE = await _context.DESCRIPTION_TYPE.FindAsync(id);
+            if (dESCRIPTION_TYPE != null)
             {
-                return Problem("Entity set 'ApplicationDbContext.MY_SKILLS'  is null.");
+                _context.DESCRIPTION_TYPE.Remove(dESCRIPTION_TYPE);
             }
-            var mY_SKILLS = await _context.MY_SKILLS.FindAsync(id);
-            if (mY_SKILLS != null)
-            {
-                _context.MY_SKILLS.Remove(mY_SKILLS);
-            }
-            
-            await _context.SaveChangesAsync();
-            _cache.Remove(Constant.mySkill);
 
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MY_SKILLSExists(int id)
+        private bool DESCRIPTION_TYPEExists(int id)
         {
-          return (_context.MY_SKILLS?.Any(e => e.AUTO_ID == id)).GetValueOrDefault();
+            return _context.DESCRIPTION_TYPE.Any(e => e.AUTO_ID == id);
         }
     }
 }

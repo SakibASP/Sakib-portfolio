@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
@@ -13,11 +14,11 @@ using SAKIB_PORTFOLIO.Models;
 namespace SAKIB_PORTFOLIO.Controllers
 {
     [Authorize]
-    public class EXPERIENCEController : Controller
+    public class EXPERIENCEController : BaseController
     {
         private readonly ApplicationDbContext _context;
 
-        public EXPERIENCEController(ApplicationDbContext context)
+        public EXPERIENCEController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
         {
             _context = context;
         }
@@ -68,7 +69,8 @@ namespace SAKIB_PORTFOLIO.Controllers
 
                 _context.Add(eXPERIENCE);
                 await _context.SaveChangesAsync();
-                HttpContext.Session.Remove(Constant.myExperience);
+                _cache.Remove(Constant.myExperience);
+                //HttpContext.Session.Remove(Constant.myExperience);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -112,7 +114,8 @@ namespace SAKIB_PORTFOLIO.Controllers
 
                     _context.Update(eXPERIENCE);
                     await _context.SaveChangesAsync();
-                    HttpContext.Session.Remove(Constant.myExperience);
+                    _cache.Remove(Constant.myExperience);
+                    //HttpContext.Session.Remove(Constant.myExperience);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -164,7 +167,8 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             
             await _context.SaveChangesAsync();
-            HttpContext.Session.Remove(Constant.myExperience);
+            _cache.Remove(Constant.myExperience);
+            //HttpContext.Session.Remove(Constant.myExperience);
 
             return RedirectToAction(nameof(Index));
         }
