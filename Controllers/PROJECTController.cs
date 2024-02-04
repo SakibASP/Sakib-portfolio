@@ -44,6 +44,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 return NotFound();
             }
+            ViewData["DESCRIPTIONs"] = await _context.DESCRIPTION.Where(x => x.PROJECT_ID == id).OrderBy(x=>x.SORT_ORDER).AsNoTracking().ToListAsync();
 
             return View(PROJECTS);
         }
@@ -61,7 +62,7 @@ namespace SAKIB_PORTFOLIO.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AUTO_ID,PROJECT_NAME,LOGO,DESCRIPTION_1,DESCRIPTION_2,DESCRIPTION_3,DESCRIPTION_4,DESCRIPTION_5,DESCRIPTION_6")] PROJECTS pROJECTS)
+        public async Task<IActionResult> Create(PROJECTS pROJECTS)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +104,7 @@ namespace SAKIB_PORTFOLIO.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,PROJECT_NAME,LOGO,DESCRIPTION_1,DESCRIPTION_2,DESCRIPTION_3,DESCRIPTION_4,DESCRIPTION_5,DESCRIPTION_6")] PROJECTS pROJECTS)
+        public async Task<IActionResult> Edit(int id, PROJECTS pROJECTS)
         {
             if (id != pROJECTS.AUTO_ID)
             {

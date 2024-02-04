@@ -10,20 +10,15 @@ using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class DESCRIPTIONsController : Controller
+    public class DESCRIPTIONsController(ApplicationDbContext context) : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public DESCRIPTIONsController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: DESCRIPTIONs
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.DESCRIPTION.Include(d => d.DESCRIPTION_TYPE_);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = _context.DESCRIPTION.Include(d => d.DESCRIPTION_TYPE_).Include(p=>p.PROJECT_);
+            return View(await applicationDbContext.OrderBy(x=>x.PROJECT_ID).ThenBy(x=>x.SORT_ORDER).ToListAsync());
         }
 
         // GET: DESCRIPTIONs/Details/5
@@ -49,6 +44,7 @@ namespace SAKIB_PORTFOLIO.Controllers
         public IActionResult Create()
         {
             ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE");
+            ViewData["PROJECT_ID"] = new SelectList(_context.PROJECTS, "AUTO_ID", "PROJECT_NAME");
             return View();
         }
 
@@ -57,7 +53,7 @@ namespace SAKIB_PORTFOLIO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AUTO_ID,DESCRIPTION_TEXT,TYPE_ID,CREATED_BY,CREATED_DATE,MODIFIED_BY,MODIFIED_DATE,SORT_ORDER")] DESCRIPTION dESCRIPTION)
+        public async Task<IActionResult> Create(DESCRIPTION dESCRIPTION)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +64,7 @@ namespace SAKIB_PORTFOLIO.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE", dESCRIPTION.TYPE_ID);
+            ViewData["PROJECT_ID"] = new SelectList(_context.PROJECTS, "AUTO_ID", "PROJECT_NAME", dESCRIPTION.PROJECT_ID);
             return View(dESCRIPTION);
         }
 
@@ -85,6 +82,7 @@ namespace SAKIB_PORTFOLIO.Controllers
                 return NotFound();
             }
             ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE", dESCRIPTION.TYPE_ID);
+            ViewData["PROJECT_ID"] = new SelectList(_context.PROJECTS, "AUTO_ID", "PROJECT_NAME", dESCRIPTION.PROJECT_ID);
             return View(dESCRIPTION);
         }
 
@@ -93,7 +91,7 @@ namespace SAKIB_PORTFOLIO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,DESCRIPTION_TEXT,TYPE_ID,CREATED_BY,CREATED_DATE,MODIFIED_BY,MODIFIED_DATE,SORT_ORDER")] DESCRIPTION dESCRIPTION)
+        public async Task<IActionResult> Edit(int id, DESCRIPTION dESCRIPTION)
         {
             if (id != dESCRIPTION.AUTO_ID)
             {
@@ -123,6 +121,7 @@ namespace SAKIB_PORTFOLIO.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE", dESCRIPTION.TYPE_ID);
+            ViewData["PROJECT_ID"] = new SelectList(_context.PROJECTS, "AUTO_ID", "PROJECT_NAME", dESCRIPTION.PROJECT_ID);
             return View(dESCRIPTION);
         }
 

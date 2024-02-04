@@ -3,14 +3,14 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<DESCRIPTION>? dESCRIPTIONs = ViewData["DESCRIPTIONs"] as List<DESCRIPTION>;
 }
 
 <section>
     <div class="container-fluid p-5">
-        <h1>Details</h1>
+        <h1>Project Details</h1>
 
         <div>
-            <h4>PROJECTS</h4>
             <hr />
             <dl class="row">
                 <dt class="col-sm-2">
@@ -35,7 +35,14 @@
             </dl>
         </div>
         <ul>
-            @if (Model.DESCRIPTION_1 != null)
+            @if(dESCRIPTIONs.Count > 0)
+            {
+                foreach(var item in dESCRIPTIONs)
+                {
+                    <li>@item.DESCRIPTION_TEXT</li>
+                }
+            }
+            @* @if (Model.DESCRIPTION_1 != null)
             {
                 <li>@Html.DisplayFor(model => model.DESCRIPTION_1)</li>
             }
@@ -58,7 +65,7 @@
             @if (Model.DESCRIPTION_6 != null)
             {
                 <li>@Html.DisplayFor(model => model.DESCRIPTION_6)</li>
-            }
+            } *@
            
         </ul>
         <div>

@@ -8,18 +8,11 @@ using System.Diagnostics;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController(ApplicationDbContext context, IMemoryCache memoryCache) : BaseController(memoryCache)
     {
         //private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _context;
-        private readonly IMemoryCache _memoryCache;
-
-        public HomeController(ApplicationDbContext context, IMemoryCache memoryCache):base(memoryCache)
-        {
-            //_logger = logger;
-            _context = context;
-            _memoryCache = memoryCache;
-        }
+        private readonly ApplicationDbContext _context = context;
+        private readonly IMemoryCache _memoryCache = memoryCache;
 
         public async Task<IActionResult> Index()
         {

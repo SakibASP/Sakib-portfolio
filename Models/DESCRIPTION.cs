@@ -16,6 +16,8 @@ namespace SAKIB_PORTFOLIO.Models
         public string? DESCRIPTION_TEXT { get; set; }
         [DisplayName("Type")]
         public int? TYPE_ID { get; set; }
+        [DisplayName("Project")]
+        public int? PROJECT_ID { get; set; }
         [DisplayName("Created By")]
         public string? CREATED_BY { get; set; }
         [DisplayName("Created Date")]
@@ -28,5 +30,7 @@ namespace SAKIB_PORTFOLIO.Models
         public int? SORT_ORDER { get; set; }
         [ForeignKey(nameof(TYPE_ID))]
         public virtual DESCRIPTION_TYPE? DESCRIPTION_TYPE_ { get; set; }
+        [ForeignKey(nameof(PROJECT_ID))]
+        public virtual PROJECTS? PROJECT_ { get; set; }
     }
 }

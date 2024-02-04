@@ -88,7 +88,7 @@
                     <li class="nav-item"><a href="@Url.Action("Resume","MY_PROFILE")">Resume</a></li>
                     <li class="nav-item"><a href="@Url.Action("Projects","MY_PROFILE")">My Works</a></li>    
                     <li><a href="@Url.Action("Contact","MY_PROFILE")">Contact</a></li>
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity!.IsAuthenticated)
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#">Admin</a>
@@ -106,6 +106,7 @@
                                     <ul>
                                         <li class="nav-item"><a href="@Url.Action("Index","EDUCATION")">Edit Education</a></li>
                                         <li class="nav-item"><a href="@Url.Action("Index","EXPERIENCE")">Edit Experience</a></li>
+                                        <li class="nav-item"><a href="@Url.Action("Index","DESCRIPTIONs")">Edit Description</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item">
