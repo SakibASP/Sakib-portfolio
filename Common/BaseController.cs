@@ -6,20 +6,14 @@ using System.Security.Claims;
 
 namespace SAKIB_PORTFOLIO.Common
 {
-    //public abstract class BaseController<T> : Controller where T : BaseController<T>
-    public class BaseController : Controller 
+    public class BaseController(IMemoryCache cache) : Controller 
     {
         //private ILogger<T>? _logger;
         //protected ILogger<T>? Logger => _logger ?? (_logger = HttpContext.RequestServices.GetService<ILogger<T>>());
         ////private IDistributedCache _Cache;
         ////protected IDistributedCache? cache => _Cache ?? throw new ArgumentNullException(nameof(_Cache));
 
-        protected readonly IMemoryCache _cache;
-
-        public BaseController(IMemoryCache cache)
-        {
-           _cache = cache;
-        }
+        protected readonly IMemoryCache _cache = cache;
 
         public string? CurrentUserId { get; set; }
         public string? CurrentUserName { get; set; }

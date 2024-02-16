@@ -44,17 +44,6 @@ namespace SAKIB_PORTFOLIO.Controllers
             return View();
         }
 
-        // for testing images view in browser
-        public IActionResult Test()
-        {
-            var services = _context.PROJECTS.ToList();
-            var prof = _context.MY_PROFILE.FirstOrDefault();
-
-            ViewData["PROFILES"] = prof;
-            ViewData["PROJECTS"] = services;
-            return View();
-        }
-
         public async Task<IActionResult> Contact()
         {
             ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
