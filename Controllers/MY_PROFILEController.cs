@@ -8,13 +8,9 @@ using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class MY_PROFILEController : BaseController
+    public class MY_PROFILEController(ApplicationDbContext context, IMemoryCache cache) : BaseController(cache)
     {
-        private readonly ApplicationDbContext _context;
-        public MY_PROFILEController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: MY_PROFILE
         [Authorize]

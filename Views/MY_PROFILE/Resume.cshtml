@@ -76,7 +76,7 @@
                                 <p>
                                     @if(dESCRIPTIONs != null)
                                     {
-                                        foreach (var desc in dESCRIPTIONs.Where(d=>d.DESCRIPTION_TYPE_!.TYPE!.Equals("Experience")))
+                                        foreach (var desc in dESCRIPTIONs.Where(d => d.DESCRIPTION_TYPE_!.TYPE!.Equals("Experience", StringComparison.CurrentCultureIgnoreCase) && d.TYPE_ID == item.AUTO_ID))
                                             {
                                             <ul>
                                                 <li>@desc.DESCRIPTION_TEXT</li>
