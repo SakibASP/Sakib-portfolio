@@ -28,9 +28,13 @@ namespace SAKIB_PORTFOLIO.Models
         public DateTime? MODIFIED_DATE { get; set; }
         [DisplayName("Order")]
         public int? SORT_ORDER { get; set; }
+        [DisplayName("Experience")]
+        public int? EXPERIENCE_ID { get; set; }
         [ForeignKey(nameof(TYPE_ID))]
         public virtual DESCRIPTION_TYPE? DESCRIPTION_TYPE_ { get; set; }
         [ForeignKey(nameof(PROJECT_ID))]
         public virtual PROJECTS? PROJECT_ { get; set; }
+        [ForeignKey(nameof(EXPERIENCE_ID))]
+        public virtual EXPERIENCE? EXPERIENCE_ { get; set; }
     }
 }

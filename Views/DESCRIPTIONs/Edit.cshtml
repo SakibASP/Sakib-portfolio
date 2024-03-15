@@ -29,6 +29,10 @@
                 <label asp-for="PROJECT_ID" class="control-label"></label>
                 <select asp-for="PROJECT_ID" class="form-control" asp-items="ViewBag.PROJECT_ID"></select>
             </div>
+            <div class="form-group" id="idExperience">
+                <label asp-for="EXPERIENCE_ID" class="control-label"></label>
+                <select asp-for="EXPERIENCE_ID" class="form-control" asp-items="ViewBag.EXPERIENCE_ID"></select>
+            </div>
             <div class="form-group">
                 <label asp-for="SORT_ORDER" class="control-label"></label>
                 <input asp-for="SORT_ORDER" class="form-control" />
@@ -71,22 +75,25 @@
         document.addEventListener("DOMContentLoaded", function (e) {
             let typeList = document.getElementById("TYPE_ID");
             let projectName = document.getElementById("idProject");
+            let experienceName = document.getElementById("idExperience");
             var selectedText = $(typeList).find("option:selected").text();
 
             // Capture change event
             $(typeList).on("change", function () {
                 let currentSelectedText = $(this).find("option:selected").text();
-                showHideProject(currentSelectedText, projectName);
+                showHideProject(currentSelectedText, projectName, experienceName);
             });
-            showHideProject(selectedText, projectName);
+            showHideProject(selectedText, projectName, experienceName);
         });
-        const showHideProject = function (selectedText, projectName) {
+        const showHideProject = function (selectedText, projectName, experienceName) {
             //alert(selectedText);
             if (selectedText == "Project") {
                 projectName.style.display = "block";
+                experienceName.style.display = "none";
             }
             else {
                 projectName.style.display = "none";
+                experienceName.style.display = "block";
             }
         }
     </script>

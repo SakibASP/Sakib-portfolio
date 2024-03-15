@@ -45,6 +45,7 @@ namespace SAKIB_PORTFOLIO.Controllers
         {
             ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE");
             ViewData["PROJECT_ID"] = new SelectList(_context.PROJECTS, "AUTO_ID", "PROJECT_NAME");
+            ViewData["EXPERIENCE_ID"] = new SelectList(_context.EXPERIENCE, "AUTO_ID", "INSTITUTE");
             return View();
         }
 
@@ -65,6 +66,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE", dESCRIPTION.TYPE_ID);
             ViewData["PROJECT_ID"] = new SelectList(_context.PROJECTS, "AUTO_ID", "PROJECT_NAME", dESCRIPTION.PROJECT_ID);
+            ViewData["EXPERIENCE_ID"] = new SelectList(_context.EXPERIENCE, "AUTO_ID", "INSTITUTE", dESCRIPTION.EXPERIENCE_ID);
             return View(dESCRIPTION);
         }
 
@@ -83,6 +85,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE", dESCRIPTION.TYPE_ID);
             ViewData["PROJECT_ID"] = new SelectList(_context.PROJECTS, "AUTO_ID", "PROJECT_NAME", dESCRIPTION.PROJECT_ID);
+            ViewData["EXPERIENCE_ID"] = new SelectList(_context.EXPERIENCE, "AUTO_ID", "INSTITUTE", dESCRIPTION.EXPERIENCE_ID);
             return View(dESCRIPTION);
         }
 
@@ -122,6 +125,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             ViewData["TYPE_ID"] = new SelectList(_context.DESCRIPTION_TYPE, "AUTO_ID", "TYPE", dESCRIPTION.TYPE_ID);
             ViewData["PROJECT_ID"] = new SelectList(_context.PROJECTS, "AUTO_ID", "PROJECT_NAME", dESCRIPTION.PROJECT_ID);
+            ViewData["EXPERIENCE_ID"] = new SelectList(_context.EXPERIENCE, "AUTO_ID", "INSTITUTE", dESCRIPTION.EXPERIENCE_ID);
             return View(dESCRIPTION);
         }
 
