@@ -19,13 +19,5 @@ namespace SAKIB_PORTFOLIO.Models
         public string? TO_DATE { get; set; }
         [DisplayName("Institute")]
         public string? INSTITUTE { get; set; }
-        //[DisplayName("Desc. 1")]
-        //public string? DES_1 { get; set; }
-        //[DisplayName("Desc. 2")]
-        //public string? DES_2 { get; set; }
-        //[DisplayName("Desc. 3")]
-        //public string? DES_3 { get; set; }
-        //[DisplayName("Desc. 4")]
-        //public string? DES_4 { get; set; }
     }
 }

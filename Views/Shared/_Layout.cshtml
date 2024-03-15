@@ -106,12 +106,15 @@
                                     <ul>
                                         <li class="nav-item"><a href="@Url.Action("Index","EDUCATION")">Edit Education</a></li>
                                         <li class="nav-item"><a href="@Url.Action("Index","EXPERIENCE")">Edit Experience</a></li>
-                                        <li class="nav-item"><a href="@Url.Action("Index","DESCRIPTIONs")">Edit Description</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item">
                                     <a href="@Url.Action("Index","PROJECTS")">Edit Projects</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index","DESCRIPTIONs")">Edit Description</a>
+                                </li>
+
                                 <li class="nav-item">
                                     @if (@ViewBag.Message != null)
                                     {

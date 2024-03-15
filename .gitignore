@@ -7,3 +7,6 @@
 /obj
 /.vs
 /Properties/PublishProfiles
+/Properties/Resources.Designer.cs
+/.gitignore
+/.gitignore
