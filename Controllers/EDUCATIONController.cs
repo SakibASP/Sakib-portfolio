@@ -14,14 +14,9 @@ using SAKIB_PORTFOLIO.Models;
 namespace SAKIB_PORTFOLIO.Controllers
 {
     [Authorize]
-    public class EDUCATIONController : BaseController
+    public class EDUCATIONController(ApplicationDbContext context) : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public EDUCATIONController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: EDUCATION
         public async Task<IActionResult> Index()
@@ -69,7 +64,6 @@ namespace SAKIB_PORTFOLIO.Controllers
 
                 _context.Add(eDUCATION);
                 await _context.SaveChangesAsync();
-                _cache.Remove(Constant.myEducation);
                 //HttpContext.Session.Remove(Constant.myEducation);
 
                 return RedirectToAction(nameof(Index));
@@ -114,7 +108,6 @@ namespace SAKIB_PORTFOLIO.Controllers
 
                     _context.Update(eDUCATION);
                     await _context.SaveChangesAsync();
-                    _cache.Remove(Constant.myEducation);
                     //HttpContext.Session.Remove(Constant.myEducation);
 
                 }
@@ -168,7 +161,6 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             
             await _context.SaveChangesAsync();
-            _cache.Remove(Constant.myEducation);
             //HttpContext.Session.Remove(Constant.myEducation);
 
             return RedirectToAction(nameof(Index));

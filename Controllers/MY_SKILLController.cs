@@ -9,14 +9,9 @@ using SAKIB_PORTFOLIO.Models;
 namespace SAKIB_PORTFOLIO.Controllers
 {
     [Authorize]
-    public class MY_SKILLController : BaseController
+    public class MY_SKILLController(ApplicationDbContext context) : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public MY_SKILLController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: MY_SKILL
         public async Task<IActionResult> Index()
@@ -61,7 +56,6 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 _context.Add(mY_SKILLS);
                 await _context.SaveChangesAsync();
-                _cache.Remove(Constant.mySkill);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -102,7 +96,6 @@ namespace SAKIB_PORTFOLIO.Controllers
                 {
                     _context.Update(mY_SKILLS);
                     await _context.SaveChangesAsync();
-                    _cache.Remove(Constant.mySkill);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -154,7 +147,6 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             
             await _context.SaveChangesAsync();
-            _cache.Remove(Constant.mySkill);
 
             return RedirectToAction(nameof(Index));
         }

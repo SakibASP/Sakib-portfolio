@@ -13,14 +13,9 @@ using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class PROJECTSController : BaseController
+    public class PROJECTSController(ApplicationDbContext context) : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public PROJECTSController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: SERVICES
         public async Task<IActionResult> Index()
@@ -74,7 +69,6 @@ namespace SAKIB_PORTFOLIO.Controllers
 
                 _context.Add(pROJECTS);
                 await _context.SaveChangesAsync();
-                _cache.Remove(Constant.myProject);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -123,7 +117,7 @@ namespace SAKIB_PORTFOLIO.Controllers
 
                     _context.Update(pROJECTS);
                     await _context.SaveChangesAsync();
-                    _cache.Remove(Constant.myProject);
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -177,7 +171,6 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             
             await _context.SaveChangesAsync();
-            _cache.Remove(Constant.myProject);
 
             return RedirectToAction(nameof(Index));
         }

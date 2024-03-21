@@ -14,14 +14,9 @@ using SAKIB_PORTFOLIO.Models;
 namespace SAKIB_PORTFOLIO.Controllers
 {
     [Authorize]
-    public class PROFILE_COVERController : BaseController
+    public class PROFILE_COVERController(ApplicationDbContext context) : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public PROFILE_COVERController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: PROFILE_COVER
         public async Task<IActionResult> Index()
@@ -71,7 +66,6 @@ namespace SAKIB_PORTFOLIO.Controllers
                     }
                     _context.Add(pROFILE_COVER);
                     await _context.SaveChangesAsync();
-                    _cache.Remove(Constant.myProfileCover);
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -122,7 +116,6 @@ namespace SAKIB_PORTFOLIO.Controllers
                     }
                     _context.Update(pROFILE_COVER);
                     await _context.SaveChangesAsync();
-                    _cache.Remove(Constant.myProfileCover);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

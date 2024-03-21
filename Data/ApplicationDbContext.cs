@@ -25,6 +25,8 @@ namespace SAKIB_PORTFOLIO.Data
                 optionsBuilder.UseSqlServer(connectionString);
             }
         }
+        public virtual DbSet<RequestCounts> RequestCounts { get; set; }
+        public virtual DbSet<Visitors> Visitors { get; set; }
         public virtual DbSet<MY_PROFILE> MY_PROFILE { get; set; }
         public virtual DbSet<MY_SKILLS> MY_SKILLS { get; set; }
         public virtual DbSet<EDUCATION> EDUCATION { get; set; }

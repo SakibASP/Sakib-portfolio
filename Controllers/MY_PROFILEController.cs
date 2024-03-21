@@ -8,7 +8,7 @@ using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class MY_PROFILEController(ApplicationDbContext context, IMemoryCache cache) : BaseController(cache)
+    public class MY_PROFILEController(ApplicationDbContext context) : BaseController
     {
         private readonly ApplicationDbContext _context = context;
 
@@ -57,7 +57,6 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 _context.CONTACTS.Add(objContact);
                 _context.SaveChanges();
-                _cache.Remove(Constant.myContact);
 
                 //HttpContext.Session.Remove(Constant.myContact);
 
@@ -164,7 +163,6 @@ namespace SAKIB_PORTFOLIO.Controllers
                     }
                     _context.Update(mY_PROFILE);
                     await _context.SaveChangesAsync();
-                    _cache.Remove(Constant.myProfile);
 
                     //HttpContext.Session.Remove(Constant.myProfile);
                 }
@@ -220,8 +218,6 @@ namespace SAKIB_PORTFOLIO.Controllers
             }
             
             await _context.SaveChangesAsync();
-
-            _cache.Remove(Constant.myProfile);
 
             //HttpContext.Session.Remove(Constant.myProfile);
             return RedirectToAction(nameof(Index));

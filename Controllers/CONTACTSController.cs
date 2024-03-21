@@ -14,14 +14,9 @@ using SAKIB_PORTFOLIO.Models;
 namespace SAKIB_PORTFOLIO.Controllers
 {
     [Authorize]
-    public class CONTACTSController : BaseController
+    public class CONTACTSController(ApplicationDbContext context) : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public CONTACTSController(ApplicationDbContext context, IMemoryCache cache) : base(cache)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: CONTACTS
         public async Task<IActionResult> Index()
@@ -56,7 +51,6 @@ namespace SAKIB_PORTFOLIO.Controllers
             cONTACTS.IsConfirmed = 1;
             _context.CONTACTS.Update(cONTACTS);
             _context.SaveChanges();
-            _cache.Remove(Constant.myContact);
             //HttpContext.Session.Remove(Constant.myContact);
 
             return View(cONTACTS);
@@ -118,7 +112,6 @@ namespace SAKIB_PORTFOLIO.Controllers
                 {
                     _context.Update(cONTACTS);
                     await _context.SaveChangesAsync();
-                    _cache.Remove(Constant.myContact);
                     //HttpContext.Session.Remove(Constant.myContact);
                 }
                 catch (DbUpdateConcurrencyException)

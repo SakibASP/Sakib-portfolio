@@ -5,14 +5,14 @@ using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class HomeController(ApplicationDbContext context, IMemoryCache memoryCache) : BaseController(memoryCache)
+    public class HomeController(ApplicationDbContext context) : BaseController
     {
         //private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context = context;
-        private readonly IMemoryCache _memoryCache = memoryCache;
 
         public async Task<IActionResult> Index()
         {
