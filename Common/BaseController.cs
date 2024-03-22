@@ -20,7 +20,7 @@ namespace SAKIB_PORTFOLIO.Common
         //public List<CONTACTS>? S_CONTACTS { get; set; }
         //public List<MY_SKILLS>? S_MY_SKILLS { get; set; }
 
-        private ApplicationDbContext _context = new();
+        private readonly ApplicationDbContext _context = new();
 
         public override async void OnActionExecuting(ActionExecutingContext filterContext)
         {
