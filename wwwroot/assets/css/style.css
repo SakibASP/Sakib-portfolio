@@ -473,6 +473,25 @@ h6 {
   background: #3dc8b7;
 }
 
+#hero .btn-cv {
+    font-family: "Raleway", sans-serif;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 12px 40px;
+    border-radius: 50px;
+    transition: 0.5s;
+    margin-top: 30px;
+    color: #fff;
+    background: #1588de;
+}
+
+    #hero .btn-cv:hover {
+        background: #185dd8;
+    }
+
 @media (min-width: 1024px) {
   #hero {
     background-attachment: fixed;

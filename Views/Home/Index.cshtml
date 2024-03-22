@@ -17,46 +17,17 @@
 </style>
 
 <style>
-    /*Back ground animation for mobile*/
-    @@keyframes color {
-        0% {
-            background: white
-        }
-
-        20% {
-            background: grey;
-        }
-
-        40% {
-            background: white;
-        }
-
-        60% {
-            background: grey;
-        }
-
-        80% {
-            background: white
-        }
-
-        100% {
-            background: grey;
-        }
-    }
 
     .width-complete {
-        width: 100%
+        width: 100%;
     }
 
     #mobIMG {
         border-radius: 25px;
         border: inset;
         border-color: aliceblue;
-        animation: color 5s infinite linear;
-        __text-align: center;
+        background: #E9E8E6;
         padding: 2em;
-        __font-family: 'Kavoon', sans-serif;
-        __font-size: 2.5em;
     }
 
     @@keyframes color-change {
@@ -124,36 +95,39 @@
         }
     }
 
-    #mobText {
+    .mobText {
         animation: color-change 2s infinite;
     }
 
-        #mobText:hover {
-            animation-play-state: paused;
-        }
+    .mobText:hover {
+        animation-play-state: paused;
+    }
 </style>
 
 <link href="~/assets/scss/mousemove.css" rel="stylesheet" />
+
+<input type="hidden" id="coverName" value="@Cover.COVER_NAME" />
+<input type="hidden" id="coverDesc" value="@Cover.COVER_DESC" />
 
 <!-- ======= Hero Section for Desktop View ======= -->
 <section id="hero" class="d-none d-sm-block align-items-center" style="overflow:hidden;">
     <div id="parallax" class="container d-flex flex-column align-items-center" data-aos="zoom-in" data-aos-delay="100">
 
-        @*<div class="pointer pointer1">☺</div>
+        <div class="pointer pointer1">☺</div>
         <div class="pointer pointer2">☻</div>
         <div class="pointer pointer3">♥</div>
         <div class="pointer pointer4">♦</div>
-        <div class="pointer pointer5">♣</div>*@
+        <div class="pointer pointer5">♣</div>
 
         <div class="container-fluid p-5">
             <div class="row align-items-center">
                 @if (Cover != null)
                 {
                     <div class="col-md-4">
-                        <div class="container-fluid" style="height:fit-content; width:fit-content; margin:auto">
+                        <div class="container-fluid" style="height:fit-content; width:fit-content; margin:auto;">
                             @if (Cover.COVER_IMAGE != null)
                             {
-                                <img class="width-complete rounded-circle img-fluid" src="data:ImageData;base64,@System.Convert.ToBase64String(Cover.COVER_IMAGE)" alt="" />
+                                <img class="width-complete rounded-circle img-fluid" src="data:ImageData;base64,@System.Convert.ToBase64String(Cover.COVER_IMAGE)" alt="Floating Image" />
                                 @*<img style="margin-left:90px;" class="rounded-circle img-fluid" src="~/assets/img/about.jpg" alt="">*@
                             }
                         </div>
@@ -162,9 +136,12 @@
                     <div class="col-md-2"></div>
 
                     <div class="col-md-6" style="margin:auto">
-                        <h1>@Cover.COVER_NAME</h1>
-                        <h2>@Cover.COVER_DESC</h2>
-                        <a href="@Url.Action("About","MY_PROFILE")" class="btn-about">About Me</a>
+                        <h1 id="welcome"></h1>
+                        <h2 id="message"></h2>
+                        <div style="display: flex; margin: 5px">
+                            <a asp-action="About" asp-controller="MY_PROFILE" class="btn-about">About Me</a>
+                            <a style="margin-left: 5px;" asp-action="DownloadCV" asp-controller="CV" asp-route-filePath="@ViewBag.FilePath" class="btn-cv">Download CV</a>
+                        </div>
                     </div>
                 }
                 else
@@ -178,7 +155,10 @@
                     <div class="col-lg-6" style="margin:auto">
                         <h1>@ViewBag.Name</h1>
                         <h2>@ViewBag.Bio</h2>
-                        <a href="@Url.Action("About","MY_PROFILE")" class="btn-about">About Me</a>
+                        <div style="display: flex;">
+                            <a asp-action="About" asp-controller="MY_PROFILE" class="btn-about">About Me</a>
+                            <a style="margin-left: 5px;" asp-action="DownloadCV" asp-controller="CV" asp-route-filePath="@ViewBag.FilePath" class="btn-cv">About Me</a>
+                        </div>
                     </div>
 
                 }
@@ -203,8 +183,8 @@
         </div>
         <div class="container-fluid p-3">
             <div class="row align-items-sm-center">
-                <h1 id="mobText">@Cover.COVER_NAME</h1>
-                <h6>@Cover.COVER_DESC</h6>
+                <h1 class="mobText" id="welcomeMobile"></h1>
+                <h6 id="messageMobile"></h6>
                 <br /> <br />
                 <a href="@Url.Action("About","MY_PROFILE")" style="width:50%; margin-left:10px;" class="btn btn-info">About Me</a>
             </div>
@@ -230,4 +210,5 @@
 </section><!-- End Hero -->
 @section Scripts{
     <script src="~/assets/js/mousemove.js"></script>
+    <script src="~/assets/js/typewriter.js"></script>
 }

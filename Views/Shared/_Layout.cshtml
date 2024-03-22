@@ -76,18 +76,18 @@
     <header id="header" class="fixed-top">
         <div class="container-fluid d-flex justify-content-between align-items-center">
 
-            <h1 class="circle"><a id="myH" href="@Url.Action("Index","Home")">Sakib</a></h1>
+            <h1 class="circle"><a id="myH" asp-action="Index" asp-controller="Home">Sakib</a></h1>
             <!-- Uncomment below if you prefer to use an image logo -->
             <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
             <nav id="navbar" class="navbar order-last order-lg-0">
                 <ul>
-                    <li class="nav-item"><a href="@Url.Action("Index","Home")">Home</a></li>
-                    @*<li class="nav-item"><a href="@Url.Action("Test","MY_PROFILE")">Test</a></li>*@
-                    <li class="nav-item"><a href="@Url.Action("About","MY_PROFILE")">About</a></li>
-                    <li class="nav-item"><a href="@Url.Action("Resume","MY_PROFILE")">Resume</a></li>
-                    <li class="nav-item"><a href="@Url.Action("Projects","MY_PROFILE")">My Works</a></li>    
-                    <li><a href="@Url.Action("Contact","MY_PROFILE")">Contact</a></li>
+                    <li class="nav-item"><a asp-action="Index" asp-controller="Home">Home</a></li>
+                    <li class="nav-item"><a asp-action="About" asp-controller="MY_PROFILE">About</a></li>
+                    <li class="nav-item"><a asp-action="Resume" asp-controller="MY_PROFILE">Resume</a></li>
+                    <li class="nav-item"><a asp-action="Projects" asp-controller="MY_PROFILE">My Works</a></li>
+                    <li class="nav-item"><a asp-action="Contact" asp-controller="MY_PROFILE">Contact</a></li>
+                    <li class="nav-item"><a asp-action="CV_Viewer" asp-controller="CV">C.V</a></li>
                     @if (User.Identity!.IsAuthenticated)
                     {
                         <li class="nav-item dropdown">
@@ -107,6 +107,9 @@
                                         <li class="nav-item"><a href="@Url.Action("Index","EDUCATION")">Edit Education</a></li>
                                         <li class="nav-item"><a href="@Url.Action("Index","EXPERIENCE")">Edit Experience</a></li>
                                     </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index","CV")">Edit CV</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="@Url.Action("Index","PROJECTS")">Edit Projects</a>
@@ -140,10 +143,10 @@
             </nav><!-- .navbar -->
 
             <div class="header-social-links">
-                <a href="https://twitter.com/Sakibur78738178" class="twitter"><i class="bi bi-twitter"></i></a>
-                <a href="https://www.facebook.com/sakibur.rahman.rocky" class="facebook"><i class="bi bi-facebook"></i></a>
-                <a href="https://www.instagram.com/sakibur_rocky/" class="instagram"><i class="bi bi-instagram"></i></a>
-                <a href="https://www.linkedin.com/in/md-sakibur-rahman-070853196/" class="linkedin"><i class="bi bi-linkedin"></i></i></a>
+                <a href="https://twitter.com/Sakibur78738178" class="twitter" target="_blank"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.facebook.com/sakibur.rahman.rocky" class="facebook" target="_blank"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/sakibur_rocky/" class="instagram" target="_blank"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/md-sakibur-rahman-070853196/" class="linkedin" target="_blank"><i class="bi bi-linkedin"></i></i></a>
             </div>
 
         </div>
@@ -166,7 +169,7 @@
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/ -->
-                Technologies by Microsoft
+                <strong>Built with .NET 8</strong>
             </div>
 
             @if (User.Identity.IsAuthenticated)

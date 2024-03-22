@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Hosting;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
@@ -9,9 +10,9 @@ using System.Net.Http;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class HomeController(ApplicationDbContext context) : BaseController
+    public class HomeController(ApplicationDbContext context, IWebHostEnvironment environment) : BaseController
     {
-        //private readonly ILogger<HomeController> _logger;
+        private readonly IWebHostEnvironment _hostEnvironment = environment;
         private readonly ApplicationDbContext _context = context;
 
         public async Task<IActionResult> Index()
@@ -29,7 +30,9 @@ namespace SAKIB_PORTFOLIO.Controllers
             //    Cover = S_PROFILE_COVER!.FirstOrDefault();
             //else
             var cover = await _context.PROFILE_COVER.FirstOrDefaultAsync();
+            var filePath = Utility.GetFilePathOfCV(_hostEnvironment);
 
+            ViewBag.FilePath = filePath;
             ViewBag.Name = "Md. Sakibur Rahman";
             ViewBag.Bio = "I am a professiona Software Developer from Khulna, Bangladesh";
             ViewBag.Cover = cover;
