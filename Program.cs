@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,20 +13,21 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
 //Session
-builder.Services.AddSession(options =>
-{
-    options.Cookie.Name = ".myPORTFOLIO.Session";
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddMvc();
+//builder.Services.AddSession(options =>
+//{
+//    options.Cookie.Name = Constant.portfolionSession;
+//    options.IdleTimeout = TimeSpan.FromMinutes(30);
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//});
+//builder.Services.AddDistributedMemoryCache();
 
+builder.Services.AddMvc();
 
 var app = builder.Build();
 
@@ -44,13 +46,14 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-//Session should be used before mvc
-app.UseSession();
-
 app.UseRouting();
+
+//Session should be used before mvc
+//app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

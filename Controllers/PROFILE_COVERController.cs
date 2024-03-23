@@ -69,9 +69,9 @@ namespace SAKIB_PORTFOLIO.Controllers
 
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception ex)
+                catch
                 {
-                    TempData["Error"] = "Sorry ! Something went wrong";
+                    TempData["Error"] = "Sorry ! Something went wrong.";
                 }
             }
             return View(pROFILE_COVER);

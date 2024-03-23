@@ -15,9 +15,9 @@ namespace SAKIB_PORTFOLIO.Helper
                         });
                 session.SetString(key, JsonString);
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception();
+                
             }
         }
 
