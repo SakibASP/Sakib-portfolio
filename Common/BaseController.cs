@@ -11,8 +11,11 @@ namespace SAKIB_PORTFOLIO.Common
 {
     public class BaseController : Controller 
     {
+        private static readonly TimeZoneInfo bdTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Bangladesh Standard Time");
         public string? CurrentUserId { get; set; }
         public string? CurrentUserName { get; set; }
+        public static DateTime BdCurrentTime { get; set; } = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, bdTimeZone);
+
         //public List<MY_PROFILE>? S_MY_PROFILE { get; set; }
         //public List<PROFILE_COVER>? S_PROFILE_COVER { get; set; }
         //public List<PROJECTS>? S_PROJECTS { get; set; }
@@ -32,116 +35,113 @@ namespace SAKIB_PORTFOLIO.Common
                 CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
 
-            var request = filterContext.HttpContext.Request;
-            if (request.Method == "GET" || request.Method == "POST")
+            try
             {
-                TimeZoneInfo bdTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Bangladesh Standard Time");
-                DateTime currentTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, bdTimeZone);
-
-                RequestCounts? requestCounts = await _context.RequestCounts.FirstOrDefaultAsync(x => x.LastUpdated.Date == currentTime.Date);
-                
-                if (requestCounts is null)
+                var request = filterContext.HttpContext.Request;
+                if (request.Method == "GET" || request.Method == "POST")
                 {
-                    requestCounts = new RequestCounts
+                    RequestCounts? requestCounts = await _context.RequestCounts.FirstOrDefaultAsync(x => x.LastUpdated.Date == BdCurrentTime.Date);
+
+                    if (requestCounts is null)
                     {
-                        LastUpdated = currentTime,
-                    };
-                    _context.RequestCounts.Add(requestCounts);
-                }
-                else
-                {
-                    requestCounts.LastUpdated = currentTime;
-                }
-
-                if (request.Method == "POST")
-                {
-                    requestCounts.PostCount++;
-                }
-
-                if(request.Method == "GET")
-                {
-                    requestCounts.GetCount++;
-                }
-
-                var ipAddress = filterContext.HttpContext.Connection.RemoteIpAddress?.ToString(); //"202.5.58.3";
-                var browser = filterContext.HttpContext.Request.Headers.UserAgent.ToString(); // Extract browser info from User-Agent header
-                var operatingSystem = GetOperatingSystem(browser); // Extract operating system from User-Agent header
-
-                var existingVisitor = await _context.Visitors
-                    .FirstOrDefaultAsync(v => v.IPAddress == ipAddress && v.VisitTime.Date == currentTime.Date && v.OperatingSystem == operatingSystem && v.Browser == browser);
-
-                if (existingVisitor is null)
-                {
-                    // Create a service collection
-                    var services = new ServiceCollection();
-
-                    // Add HttpClientFactory to the service collection
-                    services.AddHttpClient();
-
-                    // Build the service provider
-                    var serviceProvider = services.BuildServiceProvider();
-
-                    // Use the service provider to create an instance of HttpClientFactory
-                    var _httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
-
-                    // Get client's IP address Ex:  "203.188.241.51"; 
-                    // Make request to ip-api.com API
-                    var client = _httpClientFactory.CreateClient();
-
-                    Dictionary<string, dynamic> dictVisitor = [];
-
-                    var response = await client.GetAsync($"http://ip-api.com/json/{ipAddress}?fields=city,country,zip,timezone,isp,org,as");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // Parse JSON response
-                        var content = await response.Content.ReadAsStringAsync();
-                        dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject(content)!;
-
-                        if (result != null)
+                        requestCounts = new RequestCounts
                         {
-                            // Extract location information
-                            //var city = result.city;
-                            //var country = result.country;
-                            //var zip = result.zip;
-                            //var timezone = result.timezone;
-                            //var isp = result.isp;
-                            //var org = result.org;
-                            dictVisitor.Add("City", result.city);
-                            dictVisitor.Add("Country", result.country);
-                            dictVisitor.Add("Zip", result.zip);
-                            dictVisitor.Add("Timezone", result.timezone);
-                            dictVisitor.Add("Isp", result.isp);
-                            dictVisitor.Add("Org", result.org);
-                            dictVisitor.Add("As", result["as"]);
-                        }
+                            LastUpdated = BdCurrentTime,
+                        };
+                        _context.RequestCounts.Add(requestCounts);
                     }
                     else
                     {
-                        // Handle error
-                        //return StatusCode((int)response.StatusCode);
+                        requestCounts.LastUpdated = BdCurrentTime;
                     }
-                    var visitor = new Visitors
+
+                    if (request.Method == "POST")
                     {
-                        IPAddress = ipAddress,
-                        VisitTime = currentTime,
-                        Browser = browser,
-                        OperatingSystem = operatingSystem,
-                        City = dictVisitor["City"],
-                        Country = dictVisitor["Country"],
-                        Zip = dictVisitor["Zip"],
-                        Timezone = dictVisitor["Timezone"],
-                        Isp = dictVisitor["Isp"],
-                        Org = dictVisitor["Org"],
-                        As = dictVisitor["As"],
-                    };
+                        requestCounts.PostCount++;
+                    }
 
-                    _context.Visitors.Add(visitor);
+                    if (request.Method == "GET")
+                    {
+                        requestCounts.GetCount++;
+                    }
+
+                    var ipAddress = filterContext.HttpContext.Connection.RemoteIpAddress?.ToString(); //"202.5.58.3";
+                    var userAgent = filterContext.HttpContext.Request.Headers.UserAgent.ToString(); // Extract browser info from User-Agent header
+                    var userInfo = GetVisitorsDeviceInfo(userAgent); // Extract operating system from User-Agent header
+
+                    if(userInfo is not null)
+                    {
+                        var existingVisitor = await _context.Visitors
+                            .FirstOrDefaultAsync(v => v.IPAddress == ipAddress && v.VisitTime.Date == BdCurrentTime.Date && v.OperatingSystem == userInfo.OperatingSystem && v.UserAgent == userAgent);
+
+                        if (existingVisitor is null)
+                        {
+                            Visitors visitor = GetVisitorsDeviceInfo(userAgent);
+                            // Create a service collection
+                            var services = new ServiceCollection();
+
+                            // Add HttpClientFactory to the service collection
+                            services.AddHttpClient();
+
+                            // Build the service provider
+                            var serviceProvider = services.BuildServiceProvider();
+
+                            // Use the service provider to create an instance of HttpClientFactory
+                            var _httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+
+                            // Make request to ip-api.com API
+                            var client = _httpClientFactory.CreateClient();
+
+                            Dictionary<string, dynamic> dictVisitor = [];
+
+                            var response = await client.GetAsync($"http://ip-api.com/json/{ipAddress}?fields=city,country,zip,timezone,isp,org,as");
+                            if (response.IsSuccessStatusCode)
+                            {
+                                // Parse JSON response
+                                var content = await response.Content.ReadAsStringAsync();
+                                dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject(content)!;
+
+                                if (result != null)
+                                {
+                                    // Extract location information
+                                    dictVisitor.Add("City", result.city);
+                                    dictVisitor.Add("Country", result.country);
+                                    dictVisitor.Add("Zip", result.zip);
+                                    dictVisitor.Add("Timezone", result.timezone);
+                                    dictVisitor.Add("Isp", result.isp);
+                                    dictVisitor.Add("Org", result.org);
+                                    dictVisitor.Add("As", result["as"]);
+                                }
+                            }
+                            else
+                            {
+                                // Handle error
+                                //return StatusCode((int)response.StatusCode);
+                            }
+
+                            visitor.City = dictVisitor["City"];
+                            visitor.Country = dictVisitor["Country"];
+                            visitor.Zip = dictVisitor["Zip"];
+                            visitor.Timezone = dictVisitor["Timezone"];
+                            visitor.Isp = dictVisitor["Isp"];
+                            visitor.Org = dictVisitor["Org"];
+                            visitor.As = dictVisitor["As"];
+                            visitor.IPAddress = ipAddress;
+                            visitor.UserAgent = userAgent;
+                            visitor.VisitTime = BdCurrentTime;
+
+                            _context.Visitors.Add(visitor);
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+
                 }
-
-                //await _context.SaveChangesAsync();
-
             }
-
+            catch(Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+            }
 
            
             ////Populating the sessions
@@ -222,20 +222,27 @@ namespace SAKIB_PORTFOLIO.Common
             //    HttpContext.Session.SetObjectAsJson<MY_SKILLS>(Constant.myContact, S_CONTACTS);
             //}
         }
+
+        private static Visitors GetVisitorsDeviceInfo(string userAgent)
+        {
+            var uaParser = Parser.GetDefault();
+            ClientInfo clientInfo = uaParser.Parse(userAgent);
+
+            Visitors visitors = new()
+            {
+                Browser = clientInfo?.UserAgent.Family,
+                BrowserVersion = clientInfo?.UserAgent.Major,
+                OperatingSystem = string.IsNullOrEmpty(clientInfo?.OS.Family) || clientInfo?.OS.Family == "Other" ? GetOperatingSystem(userAgent) : clientInfo?.OS.Family,
+                OperatingSystemVersion = clientInfo?.OS.Major,
+                DeviceType = clientInfo?.Device.Family,
+                DeviceBrand = clientInfo?.Device?.Brand,
+                DeviceModel = clientInfo?.Device?.Model
+            };
+            return visitors;
+        }
+
         private static string GetOperatingSystem(string userAgent)
         {
-            // Parse the user-agent string using UAParser
-            string testUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21D61 [FBAN/FBIOS;FBAV/455.0.0.50.103;FBBV/575929547;FBDV/iPhone12,5;FBMD/iPhone;FBSN/iOS;FBSV/17.3.1;FBSS/3;FBID/phone;FBLC/en_US;FBOP/5;FBRV/579620881]";
-            string testUserAgent2 = "SupportsFresco=1 modular=3 Dalvik/2.1.0 (Linux; U; Android 12; 220733SG Build/SP1A.210812.016) [FBAN/EMA;FBBV/577783571;FBAV/399.0.0.16.120;FBDV/220733SG;FBSV/12;FBCX/OkHttp3;FBDM/{density=2.0}]";
-            var uaParser = Parser.GetDefault();
-            ClientInfo clientInfo = uaParser.Parse(testUserAgent2);
-
-            // Access various properties of the parsed user-agent
-            string? browserName = clientInfo.UserAgent.Family;
-            string? browserVersion = clientInfo.UserAgent.Major;
-            string? operatingSystem = clientInfo.OS.Family;
-            string? deviceType = clientInfo.Device.Family;
-
             // Logic to extract operating system from user agent string
             // You can use a library like UserAgentUtils or implement custom logic
             // For simplicity, let's assume a basic implementation
@@ -254,21 +261,21 @@ namespace SAKIB_PORTFOLIO.Common
             }
             else if (userAgent.Contains("Linux"))
             {
-                return "Google";
+                return "Linux";
             }
             else if (userAgent.Contains("Google-Safety") || userAgent.ToString() == "Google")
             {
-                return "Facebook";
+                return "Google";
             }
             else if (userAgent.Contains("facebookexternalhit"))
             {
-                return "Meta";
+                return "Facebook";
             }
             else
             {
                 return "Unknown";
             }
-
         }
+
     }
 }

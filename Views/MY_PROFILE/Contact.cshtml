@@ -5,6 +5,12 @@
     MY_PROFILE? mY_PROFILEs = ViewData["PROFILES"] as MY_PROFILE;
 }
 
+<style>
+    .error{
+        color: red;
+    }
+</style>
+
 <main id="main">
 
     <!-- ======= Contact Section ======= -->
@@ -59,19 +65,24 @@
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <input type="text" name="name" class="form-control" id="name" placeholder="Your Name">
+                                <div class="error" id="nameError"></div>
                             </div>
                             <div class="col-md-4 form-group mt-3 mt-md-0">
                                 <input type="email" class="form-control" name="email" id="email" placeholder="Your Email">
+                                <div class="error" id="emailError"></div>
                             </div>
                             <div class="col-md-4 form-group mt-3 mt-md-0">
                                 <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone No.">
+                                <div class="error" id="phoneError"></div>
                             </div>
                         </div>
                         <div class="form-group mt-3">
                             <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject">
+                            <div class="error" id="subjectError"></div>
                         </div>
                         <div class="form-group mt-3">
                             <textarea class="form-control" name="message" id="message" rows="5" placeholder="Message"></textarea>
+                            <div class="error" id="messageError"></div>
                         </div>
                         <br />
                         <div><button style="background-color:green;color:white;" class="btn btn-default" id="myButton" type="submit">Send Message</button></div>
@@ -88,96 +99,5 @@
 
 @section Scripts{
 
-    <script>
-
-        $("#myButton").click(function () {
-            validation_check();
-        });
-
-
-        function validation_check(){
-            var Name = $("#name").val();
-            var Email = $("#email").val();
-            var Message = $("#message").val();
-            var Subject = $("#subject").val();
-            var Phone = $("#phone").val();
-
-            if (Name === "") {
-                alert("Please enter your Name");
-                $("#name").focus();
-                return false;
-            }
-            else if (Email === "") {
-                alert("Please enter your Email");
-                $("#email").focus();
-                return false;
-            }
-            else if (Phone === "") {
-                alert("Please enter your Phone No.");
-                $("#phone").focus();
-                return false;
-            }
-            else if (Subject === "") {
-                alert("Please enter Subject");
-                $("#subject").focus();
-                return false;
-            }
-            else if (Message === "") {
-                alert("Please write some Message");
-                $("#message").focus();
-                return false;
-            }
-            else{
-                $("#myButton").css("background-color", "blue");
-                $("#myButton").css("color", "white");
-                SendMessage();
-            }  
-        }
-
-        function SendMessage() {
-
-            var objContact = {};
-
-            var Name = $("#name").val();
-            var Email = $("#email").val();
-            var Message = $("#message").val();
-            var Subject = $("#subject").val();
-            var Phone = $("#phone").val();
-
-            objContact.NAME = Name;
-            objContact.SUBJECT = Subject;
-            objContact.MESSAGE = Message;
-            objContact.EMAIL = Email;
-            objContact.PHONE = Phone;
-
-
-            $.ajax({
-                async: true,
-                url: '@Url.Action("Contact","MY_PROFILE")',
-                type: "POST",
-                dataType: 'json',
-                data: { objContact },
-                //contentType: "application/json; charset=utf-8",
-
-                success: function (data) {
-                    if (data.status === true) {
-                        alert(data.message);
-                        $("#myButton").css("background-color", "green");
-                        $("#myButton").css("color", "white");
-                    }
-                    if (data.status === false) {
-                        alert(data.message);
-                    }
-
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status);
-                    alert(thrownError);
-                }
-            });
-
-        }
-
-    </script>
-
+    <script src="~/js/contacts/messagecontent.js"></script>
 }

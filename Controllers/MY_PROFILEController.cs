@@ -51,20 +51,36 @@ namespace SAKIB_PORTFOLIO.Controllers
         }
 
         [HttpPost]
-        public JsonResult Contact(CONTACTS objContact)
+        public async Task<JsonResult> Contact(CONTACTS objContact)
         {
             try
             {
+                //sending email if it is not null
+                if (!string.IsNullOrEmpty(objContact.EMAIL))
+                {
+                    try
+                    {
+                        EmailSettings email = new();
+                        SendEmail sendEmail = new(email);
+                        const string subject = "Welcome";
+                        const string htmlMessage = "Thanks for contacting with me. I will response as soon as possible";
+                        await sendEmail.SendEmailAsync(objContact.EMAIL, subject, htmlMessage);
+                    }
+                    catch
+                    {
+                        return Json(data: new { message = "Not a valid email", status = false });
+                    }
+                }
+
+                objContact.CREATED_DATE = BdCurrentTime;
                 _context.CONTACTS.Add(objContact);
-                _context.SaveChanges();
-
+                await _context.SaveChangesAsync();
                 //HttpContext.Session.Remove(Constant.myContact);
-
                 return Json(data: new { message = "Message Sent Successfully", status = true });
             }
-            catch (Exception ex)
+            catch
             {
-                return Json(data: new { message = ex.Message, status = false });
+                return Json(data: new { message = "Something went wrong", status = false });
             }
         }
         //// GET: MY_PROFILE/Details/5
@@ -201,27 +217,27 @@ namespace SAKIB_PORTFOLIO.Controllers
         //    return View(mY_PROFILE);
         //}
 
-        // POST: MY_PROFILE/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.MY_PROFILE == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.MY_PROFILE'  is null.");
-            }
-            var mY_PROFILE = await _context.MY_PROFILE.FindAsync(id);
-            if (mY_PROFILE != null)
-            {
-                _context.MY_PROFILE.Remove(mY_PROFILE);
-            }
+        //// POST: MY_PROFILE/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[Authorize]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    if (_context.MY_PROFILE == null)
+        //    {
+        //        return Problem("Entity set 'ApplicationDbContext.MY_PROFILE'  is null.");
+        //    }
+        //    var mY_PROFILE = await _context.MY_PROFILE.FindAsync(id);
+        //    if (mY_PROFILE != null)
+        //    {
+        //        _context.MY_PROFILE.Remove(mY_PROFILE);
+        //    }
             
-            await _context.SaveChangesAsync();
+        //    await _context.SaveChangesAsync();
 
-            //HttpContext.Session.Remove(Constant.myProfile);
-            return RedirectToAction(nameof(Index));
-        }
+        //    //HttpContext.Session.Remove(Constant.myProfile);
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool MY_PROFILEExists(int id)
         {

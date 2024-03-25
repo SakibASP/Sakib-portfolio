@@ -21,8 +21,8 @@ namespace SAKIB_PORTFOLIO.Controllers
                 //if (S_CONTACTS is not null)
                 //    myMessage = S_CONTACTS!.Where(x => x.IsConfirmed == null).ToList();
                 //else
-                var myMessage = await _context.CONTACTS.Where(x => x.IsConfirmed == null).ToListAsync();
-                TempData["Message"] = myMessage == null ? "" : myMessage.Count.ToString();
+                var myMessage = await _context.CONTACTS.Where(x => x.IsConfirmed == null || x.IsConfirmed == 0).ToListAsync();
+                ViewData["Message"] = myMessage == null ? "" : myMessage.Count.ToString();
             }
 
             //if (S_PROFILE_COVER is not null)
@@ -35,6 +35,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             ViewBag.Name = "Md. Sakibur Rahman";
             ViewBag.Bio = "I am a professiona Software Developer from Khulna, Bangladesh";
             ViewBag.Cover = cover;
+
             return View();
         }
 

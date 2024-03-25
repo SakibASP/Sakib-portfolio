@@ -4,8 +4,8 @@
     ViewData["Title"] = "Home Page";
     var Cover = (PROFILE_COVER)ViewBag.Cover;
 
-    var userAgent = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
-    bool isChrome = userAgent.Contains("Chrome");
+    // var userAgent = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+    // bool isChrome = userAgent.Contains("Chrome");
 }
 
 <link href="~/assets/scss/mousemove.css" rel="stylesheet" />
@@ -14,7 +14,7 @@
 <input type="hidden" id="coverName" value="@Cover.COVER_NAME" />
 <input type="hidden" id="coverDesc" value="@Cover.COVER_DESC" />
 
-@if (!isChrome)
+@* @if (isFacebook)
 {
     <section id="modalsection">
         <div class="container-fluid py-5">
@@ -28,7 +28,7 @@
             </div>
         </div>
     </section>
-}
+} *@
 
 <!-- ======= Hero Section for Desktop View ======= -->
 <section id="hero" class="d-none d-sm-block align-items-center" style="overflow:hidden;">

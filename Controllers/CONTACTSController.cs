@@ -48,9 +48,15 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 return NotFound();
             }
-            cONTACTS.IsConfirmed = 1;
-            _context.CONTACTS.Update(cONTACTS);
-            _context.SaveChanges();
+
+            if (cONTACTS.IsConfirmed != 1)
+            {
+                cONTACTS.IsConfirmed = 1;
+                cONTACTS.MODIFIED_DATE = BdCurrentTime;
+                _context.CONTACTS.Update(cONTACTS);
+                await _context.SaveChangesAsync();
+            }
+
             //HttpContext.Session.Remove(Constant.myContact);
 
             return View(cONTACTS);
@@ -99,7 +105,7 @@ namespace SAKIB_PORTFOLIO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,IsConfirmed,NAME,SUBJECT,MESSAGE,EMAIL,PHONE")] CONTACTS cONTACTS)
+        public async Task<IActionResult> Edit(int id, CONTACTS cONTACTS)
         {
             if (id != cONTACTS.AUTO_ID)
             {
@@ -131,41 +137,41 @@ namespace SAKIB_PORTFOLIO.Controllers
         }
 
         // GET: CONTACTS/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null || _context.CONTACTS == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.CONTACTS == null)
+            {
+                return NotFound();
+            }
 
-        //    var cONTACTS = await _context.CONTACTS
-        //        .FirstOrDefaultAsync(m => m.AUTO_ID == id);
-        //    if (cONTACTS == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var cONTACTS = await _context.CONTACTS
+                .FirstOrDefaultAsync(m => m.AUTO_ID == id);
+            if (cONTACTS == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(cONTACTS);
-        //}
+            return View(cONTACTS);
+        }
 
         //// POST: CONTACTS/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.CONTACTS == null)
-        //    {
-        //        return Problem("Entity set 'ApplicationDbContext.CONTACTS'  is null.");
-        //    }
-        //    var cONTACTS = await _context.CONTACTS.FindAsync(id);
-        //    if (cONTACTS != null)
-        //    {
-        //        _context.CONTACTS.Remove(cONTACTS);
-        //    }
-            
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.CONTACTS == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.CONTACTS'  is null.");
+            }
+            var cONTACTS = await _context.CONTACTS.FindAsync(id);
+            if (cONTACTS != null)
+            {
+                _context.CONTACTS.Remove(cONTACTS);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool CONTACTSExists(int id)
         {

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
@@ -27,6 +28,11 @@ builder.Services.AddControllersWithViews();
 //});
 //builder.Services.AddDistributedMemoryCache();
 
+//email setting
+EmailSettings emailSettings = new();
+builder.Services.AddTransient<IEmailSender>(provider =>
+     new SendEmail(emailSettings));
+
 builder.Services.AddMvc();
 
 var app = builder.Build();
@@ -43,7 +49,7 @@ else
     app.UseHsts();
 }
 
-// Filter access from different browsers
+// Filter access from different bot browsers
 app.Use(async (context, next) =>
 {
     string userAgent = context.Request.Headers.UserAgent.ToString();

@@ -22,5 +22,7 @@ namespace SAKIB_PORTFOLIO.Models
         public string? EMAIL { get; set; }
         [DisplayName("Phone")]
         public string? PHONE { get; set; }
+        public DateTime? CREATED_DATE { get; set; }
+        public DateTime? MODIFIED_DATE { get; set; }
     }
 }
