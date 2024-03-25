@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Hosting;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
 using System.Diagnostics;
-using System.Net.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using UAParser;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {

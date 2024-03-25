@@ -43,6 +43,26 @@ else
     app.UseHsts();
 }
 
+// Filter access from different browsers
+app.Use(async (context, next) =>
+{
+    string userAgent = context.Request.Headers.UserAgent.ToString();
+    if (userAgent.Contains("Mediatoolkitbot"))
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        await context.Response.WriteAsync("Access Forbidden for Mediatoolkitbot");
+        return;
+    }
+    else if (userAgent.Contains("facebookexternalhit"))
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        await context.Response.WriteAsync("Sakib has restricted Facebook Browser for the site. Please use an external browser.");
+        return;
+    }
+
+    await next();
+});
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

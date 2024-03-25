@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 using SAKIB_PORTFOLIO.Data;
 using SAKIB_PORTFOLIO.Models;
 using System.Security.Claims;
+using UAParser;
 
 namespace SAKIB_PORTFOLIO.Common
 {
@@ -62,7 +63,7 @@ namespace SAKIB_PORTFOLIO.Common
                     requestCounts.GetCount++;
                 }
 
-                var ipAddress = filterContext.HttpContext.Connection.RemoteIpAddress?.ToString();
+                var ipAddress = filterContext.HttpContext.Connection.RemoteIpAddress?.ToString(); //"202.5.58.3";
                 var browser = filterContext.HttpContext.Request.Headers.UserAgent.ToString(); // Extract browser info from User-Agent header
                 var operatingSystem = GetOperatingSystem(browser); // Extract operating system from User-Agent header
 
@@ -137,7 +138,7 @@ namespace SAKIB_PORTFOLIO.Common
                     _context.Visitors.Add(visitor);
                 }
 
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
 
             }
 
@@ -223,6 +224,18 @@ namespace SAKIB_PORTFOLIO.Common
         }
         private static string GetOperatingSystem(string userAgent)
         {
+            // Parse the user-agent string using UAParser
+            string testUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21D61 [FBAN/FBIOS;FBAV/455.0.0.50.103;FBBV/575929547;FBDV/iPhone12,5;FBMD/iPhone;FBSN/iOS;FBSV/17.3.1;FBSS/3;FBID/phone;FBLC/en_US;FBOP/5;FBRV/579620881]";
+            string testUserAgent2 = "SupportsFresco=1 modular=3 Dalvik/2.1.0 (Linux; U; Android 12; 220733SG Build/SP1A.210812.016) [FBAN/EMA;FBBV/577783571;FBAV/399.0.0.16.120;FBDV/220733SG;FBSV/12;FBCX/OkHttp3;FBDM/{density=2.0}]";
+            var uaParser = Parser.GetDefault();
+            ClientInfo clientInfo = uaParser.Parse(testUserAgent2);
+
+            // Access various properties of the parsed user-agent
+            string? browserName = clientInfo.UserAgent.Family;
+            string? browserVersion = clientInfo.UserAgent.Major;
+            string? operatingSystem = clientInfo.OS.Family;
+            string? deviceType = clientInfo.Device.Family;
+
             // Logic to extract operating system from user agent string
             // You can use a library like UserAgentUtils or implement custom logic
             // For simplicity, let's assume a basic implementation
@@ -241,12 +254,21 @@ namespace SAKIB_PORTFOLIO.Common
             }
             else if (userAgent.Contains("Linux"))
             {
-                return "Linux";
+                return "Google";
+            }
+            else if (userAgent.Contains("Google-Safety") || userAgent.ToString() == "Google")
+            {
+                return "Facebook";
+            }
+            else if (userAgent.Contains("facebookexternalhit"))
+            {
+                return "Meta";
             }
             else
             {
                 return "Unknown";
             }
+
         }
     }
 }
