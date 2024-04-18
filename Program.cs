@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using SAKIB_PORTFOLIO.Common;
 using SAKIB_PORTFOLIO.Data;
+using UAParser;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,12 +60,26 @@ app.Use(async (context, next) =>
         await context.Response.WriteAsync("Access Forbidden for Mediatoolkitbot");
         return;
     }
-    else if (userAgent.Contains("facebookexternalhit"))
+    //this a facebook bot
+    else if (userAgent.Contains("WhatsApp"))
     {
         context.Response.StatusCode = StatusCodes.Status403Forbidden;
-        await context.Response.WriteAsync("Sakib has restricted Facebook Browser for the site. Please use an external browser.");
+        await context.Response.WriteAsync("Sakib has restricted WhatsApp bot/spider for the site. Please use an external browser.");
         return;
     }
+
+    var uaParser = Parser.GetDefault();
+    ClientInfo clientInfo = uaParser.Parse(userAgent);
+    if (clientInfo != null)
+    {
+        if (clientInfo.UserAgent.Family.Contains("bot", StringComparison.CurrentCultureIgnoreCase) || clientInfo.Device.Family.Contains("spider",StringComparison.CurrentCultureIgnoreCase))
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsync("Sakib has restricted Bots and spiders for the site.");
+            return;
+        }
+    }
+    
 
     await next();
 });
