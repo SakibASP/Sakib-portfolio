@@ -39,7 +39,7 @@ namespace SAKIB_PORTFOLIO.Models
         public string? HOMETOWN { get; set; }
 
         [DisplayName("Image")]
-        public byte[]? PROFILE_IMAGE { get; set; }
+        public string? PROFILE_IMAGE { get; set; }
 
         [DisplayName("Description 1")]
         [DataType(DataType.MultilineText)]

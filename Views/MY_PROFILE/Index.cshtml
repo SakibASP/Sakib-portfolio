@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var rootpath = (string)ViewBag.rootPath;
 }
 
 <section>
@@ -104,7 +105,8 @@
                                 <dd class="col-sm-10">
                                     @if (item.PROFILE_IMAGE != null)
                                     {
-                                        <img class="img-fluid" style="height:120px;width:120px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.PROFILE_IMAGE)" />
+                                        <img class="img-fluid" style="height:120px;width:120px;" src="@Url.Content(item.PROFILE_IMAGE.Replace(rootpath,""))" />
+                                        @* <img class="img-fluid" style="height:120px;width:120px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.PROFILE_IMAGE)" /> *@
                                     }
                                 </dd>
                             </dl>

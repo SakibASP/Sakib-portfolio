@@ -4,6 +4,7 @@
 @{
     MY_PROFILE? mY_PROFILEs = ViewData["PROFILES"] as MY_PROFILE;
     List<MY_SKILLS>? mY_SKILLs = ViewData["SKILLS"] as List<MY_SKILLS>;
+    var rootpath = (string)ViewBag.rootPath;
 }
 <style>
     #myImg {
@@ -26,7 +27,8 @@
                     @if (@mY_PROFILEs.PROFILE_IMAGE != null)
                     {
                         <div class="col-lg-4">
-                            <img style="height:400px" id="myImg" class="img-fluid" src="data:ImageData;base64,@System.Convert.ToBase64String(mY_PROFILEs.PROFILE_IMAGE)" />
+                            <img style="height:400px" id="myImg" class="img-fluid" src="@Url.Content(mY_PROFILEs.PROFILE_IMAGE.Replace(rootpath,""))" />
+                            @* <img style="height:400px" id="myImg" class="img-fluid" src="data:ImageData;base64,@System.Convert.ToBase64String(mY_PROFILEs.PROFILE_IMAGE)" /> *@
                         </div>
                     }
                     @*<div class="col-lg-4">

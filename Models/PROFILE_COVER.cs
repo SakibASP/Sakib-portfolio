@@ -17,6 +17,6 @@ namespace SAKIB_PORTFOLIO.Models
         public string COVER_DESC { get; set; }
 
         [DisplayName("Cover Picture")]
-        public byte[]? COVER_IMAGE { get; set; }
+        public string? COVER_IMAGE { get; set; }
     }
 }

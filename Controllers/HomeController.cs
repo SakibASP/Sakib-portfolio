@@ -6,6 +6,7 @@ using SAKIB_PORTFOLIO.Models;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Http.Extensions;
 using UAParser;
+using Microsoft.AspNetCore.Hosting;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
@@ -35,6 +36,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             ViewBag.Name = "Md. Sakibur Rahman";
             ViewBag.Bio = "I am a professiona Software Developer from Khulna, Bangladesh";
             ViewBag.Cover = cover;
+            ViewData["rootPath"] = _hostEnvironment.WebRootPath;
 
             return View();
         }

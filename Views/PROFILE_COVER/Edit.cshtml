@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var rootpath = (string)ViewBag.rootPath;
 }
 
 <section>
@@ -29,7 +30,8 @@
                     <div class="form-group">
                         @if(Model.COVER_IMAGE != null){
                         <label asp-for="COVER_IMAGE" class="control-label"></label>
-                        <img class="img-fluid" style="height:120px;width:120px;" src="data:ImageData;base64,@System.Convert.ToBase64String(Model.COVER_IMAGE)" />
+                        <img class="img-fluid" style="height:75px;width:75px;" src="@Url.Content(Model.COVER_IMAGE.Replace(rootpath,""))" />
+                        @* <img class="img-fluid" style="height:120px;width:120px;" src="data:ImageData;base64,@System.Convert.ToBase64String(Model.COVER_IMAGE)" /> *@
                         <span asp-validation-for="COVER_IMAGE" class="text-danger"></span>
                         }
                     </div>

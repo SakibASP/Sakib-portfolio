@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -8,21 +9,24 @@ using SAKIB_PORTFOLIO.Models;
 
 namespace SAKIB_PORTFOLIO.Controllers
 {
-    public class MY_PROFILEController(ApplicationDbContext context) : BaseController
+    public class MY_PROFILEController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment) : BaseController
     {
         private readonly ApplicationDbContext _context = context;
+        private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
 
         // GET: MY_PROFILE
         [Authorize]
         public async Task<IActionResult> Index()
         {
-              return _context.MY_PROFILE != null ? 
+            ViewData["rootPath"] = _webHostEnvironment.WebRootPath;
+            return _context.MY_PROFILE != null ? 
                           View(await _context.MY_PROFILE.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.MY_PROFILE'  is null.");
         }
 
         public async Task<IActionResult> About()
         {
+            ViewData["rootPath"] = _webHostEnvironment.WebRootPath;
             ViewData["SKILLS"] = await _context.MY_SKILLS.AsNoTracking().ToListAsync();
             ViewData["PROFILES"] = await _context.MY_PROFILE.AsNoTracking().FirstOrDefaultAsync();
             return View();
@@ -115,16 +119,35 @@ namespace SAKIB_PORTFOLIO.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AUTO_ID,MY_NAME,DESIGNATION,AGE,MY_WEBSITE,DEGREE,PHONE,EMAIL,CURRENT_CITY,HOMETOWN,PROFILE_IMAGE,DES_1,DES_2,DES_3,DATE_OF_BIRTH")] MY_PROFILE mY_PROFILE)
+        public async Task<IActionResult> Create(MY_PROFILE mY_PROFILE)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var imgFile = Request.Form.Files.FirstOrDefault();
-                    if (imgFile != null)
+                    var files = Request.Form.Files.FirstOrDefault();
+                    if (files != null)
                     {
-                        mY_PROFILE.PROFILE_IMAGE = Utility.Getimage(mY_PROFILE.PROFILE_IMAGE, Request.Form.Files);
+                        const string rootFolder = @"Images\About";
+                        string? directoryPath = Path.Combine(_webHostEnvironment.WebRootPath, rootFolder);
+                        // Check if the directory exists; if not, create it
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+
+                        //Time in seconds
+                        string formattedDateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+                        var fileName = formattedDateTime + "_" + files.FileName;
+                        var uploadPath = Path.Combine(directoryPath, fileName);
+
+                        //saving the file
+                        await Utility.SaveFileAsync(uploadPath, files);
+                        mY_PROFILE.PROFILE_IMAGE = uploadPath;
+
+                        _context.Add(mY_PROFILE);
+                        await _context.SaveChangesAsync();
+
                     }
                     _context.Add(mY_PROFILE);
                     await _context.SaveChangesAsync();
@@ -152,6 +175,7 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 return NotFound();
             }
+            ViewData["rootPath"] = _webHostEnvironment.WebRootPath;
             return View(mY_PROFILE);
         }
 
@@ -161,7 +185,7 @@ namespace SAKIB_PORTFOLIO.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AUTO_ID,MY_NAME,DESIGNATION,AGE,MY_WEBSITE,DEGREE,PHONE,EMAIL,CURRENT_CITY,HOMETOWN,PROFILE_IMAGE,DES_1,DES_2,DES_3,DATE_OF_BIRTH")] MY_PROFILE mY_PROFILE)
+        public async Task<IActionResult> Edit(int id,MY_PROFILE mY_PROFILE)
         {
             if (id != mY_PROFILE.AUTO_ID)
             {
@@ -172,11 +196,29 @@ namespace SAKIB_PORTFOLIO.Controllers
             {
                 try
                 {
-                    var img_file = Request.Form.Files.FirstOrDefault();
-                    if (img_file != null)
+                    var files = Request.Form.Files.FirstOrDefault();
+                    if (files != null)
                     {
-                        mY_PROFILE.PROFILE_IMAGE = Utility.Getimage(mY_PROFILE.PROFILE_IMAGE, Request.Form.Files);
+                        const string rootFolder = @"Images\About";
+                        string? directoryPath = Path.Combine(_webHostEnvironment.WebRootPath, rootFolder);
+                        // Check if the directory exists; if not, create it
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+
+                        //Time in seconds
+                        string formattedDateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+                        var fileName = formattedDateTime + "_" + files.FileName;
+                        var uploadPath = Path.Combine(directoryPath, fileName);
+                        //delete old picture
+                        if (System.IO.File.Exists(mY_PROFILE?.PROFILE_IMAGE))
+                            System.IO.File.Delete(mY_PROFILE.PROFILE_IMAGE);
+                        //saving the file
+                        await Utility.SaveFileAsync(uploadPath, files);
+                        mY_PROFILE.PROFILE_IMAGE = uploadPath;
                     }
+
                     _context.Update(mY_PROFILE);
                     await _context.SaveChangesAsync();
 

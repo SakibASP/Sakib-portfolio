@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var rootpath = (string)ViewBag.rootPath;
 }
 
 <style>
@@ -93,7 +94,8 @@
                         @if (Model.PROFILE_IMAGE != null)
                         {
                             <label asp-for="PROFILE_IMAGE" class="control-label"></label>
-                            <img class="img-fluid" style="height:120px;width:120px;" src="data:ImageData;base64,@System.Convert.ToBase64String(Model.PROFILE_IMAGE)" />
+                            <img class="img-fluid" style="height:120px;width:120px;" src="@Url.Content(Model.PROFILE_IMAGE.Replace(rootpath,""))" />
+                            @* <img class="img-fluid" style="height:120px;width:120px;" src="data:ImageData;base64,@System.Convert.ToBase64String(Model.PROFILE_IMAGE)" /> *@
                             @*<input asp-for="PROFILE_IMAGE" class="form-control" />*@
                             <span asp-validation-for="PROFILE_IMAGE" class="text-danger"></span>
                         }

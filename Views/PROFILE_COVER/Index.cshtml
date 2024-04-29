@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    var rootpath = (string)ViewBag.rootPath;
 }
 
 <h1>Index</h1>
@@ -42,7 +43,8 @@
                         <td>
                             @if (item.COVER_IMAGE != null)
                             {
-                                <img class="img-fluid" style="height:120px;width:120px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.COVER_IMAGE)" />
+                                <img class="img-fluid" style="height:120px;width:120px;" src="@Url.Content(item.COVER_IMAGE.Replace(rootpath,""))" />
+                                @* <img class="img-fluid" style="height:120px;width:120px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.COVER_IMAGE)" /> *@
                             }
                         </td>
                         @*<td>
